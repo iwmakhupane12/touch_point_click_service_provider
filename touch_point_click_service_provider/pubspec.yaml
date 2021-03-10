@@ -33,6 +33,7 @@ dependencies:
   country_calling_code_picker: ^1.0.8+1
   email_validator: ^1.0.6
   sticky_headers: ^0.1.8+1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
