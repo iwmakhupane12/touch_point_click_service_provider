@@ -9,9 +9,9 @@ class OnlineOfflineAppBar extends StatefulWidget {
   _OnlineOfflineAppBarState createState() => _OnlineOfflineAppBarState();
 }
 
-class _OnlineOfflineAppBarState extends State<OnlineOfflineAppBar> {
-  bool _dismissed = false;
+bool _dismissed = false;
 
+class _OnlineOfflineAppBarState extends State<OnlineOfflineAppBar> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(

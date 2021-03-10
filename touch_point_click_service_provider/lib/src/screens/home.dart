@@ -17,9 +17,15 @@ import 'package:touch_point_click_service_provider/src/screens/requests.dart';
 import 'package:touch_point_click_service_provider/src/screens/reports.dart';
 
 class Home extends StatefulWidget {
+  final OnlineOfflineAppBar onlineOfflineAppBar;
+
+  Home({this.onlineOfflineAppBar});
+
   @override
   _HomeState createState() => _HomeState();
 }
+
+OnlineOfflineAppBar onlineOfflineAppBar;
 
 class _HomeState extends State<Home> {
   FontWeight bold = FontWeight.bold;
@@ -29,76 +35,87 @@ class _HomeState extends State<Home> {
   final String pendingRequests = "Pending Request(s)";
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.onlineOfflineAppBar == null) {
+      onlineOfflineAppBar = OnlineOfflineAppBar();
+    } else {
+      onlineOfflineAppBar = widget.onlineOfflineAppBar;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0.0,
-          title: Text(
-            "Dashboard",
-            style: AppTextStyles.normalLarge(bold, color),
-          ),
-          actions: [
-            messageNotif(),
-            generalNotif(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0.0,
+        title: Text(
+          "Dashboard",
+          style: AppTextStyles.normalLarge(bold, color),
+        ),
+        actions: [
+          messageNotif(),
+          generalNotif(),
+        ],
+      ),
+      body: BaseWidget.clipedBase(
+        ListView(
+          children: [
+            Container(height: 150, child: homeProfile()),
+            dashGrid(),
+            UtilWidget.stickyHeader(
+              currentRequests,
+              currentPendingHeadings(
+                PendingAccept("4110", "3427 K Section, Botshabelo, 9781",
+                    "10 Mar 2021", "16:09"),
+              ),
+            ),
+            UtilWidget.stickyHeader(
+              pendingRequests,
+              currentPendingHeadings(
+                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                    "11 Mar 2021", "17:30"),
+              ),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
+            currentPendingHeadings(
+              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
+                  "11 Mar 2021", "17:30"),
+            ),
           ],
         ),
-        body: BaseWidget.clipedBase(
-          ListView(
-            children: [
-              Container(height: 150, child: homeProfile()),
-              dashGrid(),
-              UtilWidget.stickyHeader(
-                currentRequests,
-                currentPendingHeadings(
-                  PendingAccept("4110", "3427 K Section, Botshabelo, 9781",
-                      "10 Mar 2021", "16:09"),
-                ),
-              ),
-              UtilWidget.stickyHeader(
-                pendingRequests,
-                currentPendingHeadings(
-                  PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                      "11 Mar 2021", "17:30"),
-                ),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: OnlineOfflineAppBar());
+      ),
+      bottomNavigationBar: onlineOfflineAppBar,
+    );
   }
 
   Widget currentPendingHeadings(Widget requests) {
@@ -139,22 +156,22 @@ class _HomeState extends State<Home> {
               break;
             case "requests":
               {
-                return Requests();
+                return Requests(onlineOfflineAppBar);
               }
               break;
             case "schedule":
               {
-                return Schedule();
+                return Schedule(onlineOfflineAppBar);
               }
               break;
             case "services":
               {
-                return Services();
+                return Services(onlineOfflineAppBar);
               }
               break;
             case "reports":
               {
-                return Reports();
+                return Reports(onlineOfflineAppBar);
               }
               break;
           }

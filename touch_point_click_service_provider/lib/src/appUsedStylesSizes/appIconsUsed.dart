@@ -83,6 +83,12 @@ class AppIconsUsed {
     size: 24,
   );
 
+  static Icon iosBackwardArrow = Icon(
+    Icons.arrow_back_ios_rounded,
+    color: Colors.black,
+    size: 24,
+  );
+
   static Icon locationPin = Icon(
     Icons.location_on_outlined,
     size: 18,
