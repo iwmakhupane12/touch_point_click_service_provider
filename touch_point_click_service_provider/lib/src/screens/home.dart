@@ -30,7 +30,8 @@ OnlineOfflineAppBar onlineOfflineAppBar;
 class _HomeState extends State<Home> {
   FontWeight bold = FontWeight.bold;
   FontWeight normal = FontWeight.normal;
-  Color color = Colors.black;
+  Color black = Colors.black;
+  Color white = Colors.white;
   final String currentRequests = "Current Request";
   final String pendingRequests = "Pending Request(s)";
 
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
         elevation: 0.0,
         title: Text(
           "Dashboard",
-          style: AppTextStyles.normalLarge(bold, color),
+          style: AppTextStyles.normalLarge(bold, black),
         ),
         actions: [
           messageNotif(),
@@ -64,6 +65,8 @@ class _HomeState extends State<Home> {
         ListView(
           children: [
             Container(height: 150, child: homeProfile()),
+            UtilWidget.baseCard(
+                50, lunchBtn()), //Check if user is online, if yes, display
             dashGrid(),
             UtilWidget.stickyHeader(
               currentRequests,
@@ -190,7 +193,7 @@ class _HomeState extends State<Home> {
         width: 50,
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: white,
           boxShadow: [
             BoxShadow(
               blurRadius: 10,
@@ -212,19 +215,9 @@ class _HomeState extends State<Home> {
       onTap: () {
         navToScreen("profile");
       },
-      child: Container(
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 10,
-                color: Colors.black26, //Color(0x802196F3),
-              )
-            ],
-            borderRadius: BorderRadius.circular(25)),
-        height: 50,
-        child: Padding(
+      child: UtilWidget.baseCard(
+        50,
+        Padding(
           padding: const EdgeInsets.all(16.0),
           child: Flex(
             direction: Axis.horizontal,
@@ -275,6 +268,30 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget lunchBtn() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Are you starving?",
+          style: AppTextStyles.normalBlack(normal, black),
+          overflow: TextOverflow.ellipsis,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: ElevatedButton(
+            onPressed: () {},
+            style: UtilWidget.buttonStyle,
+            child: Text(
+              "Go To Lunch",
+              style: AppTextStyles.normalBlack(normal, white),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

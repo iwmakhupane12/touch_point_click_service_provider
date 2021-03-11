@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
+import 'package:touch_point_click_service_provider/src/screens/schedules.dart';
+import 'package:touch_point_click_service_provider/src/screens/toDoList.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
@@ -24,6 +25,7 @@ class Schedule extends StatefulWidget {
 class _ScheduleState extends State<Schedule> {
   final FontWeight normal = FontWeight.normal;
   final Color black = Colors.black;
+  final Color white = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class _ScheduleState extends State<Schedule> {
       child: BaseWidget.defaultScreen(
         context,
         screenBody(),
-        AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Set Schedule"),
+        AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Schedules"),
         "Schedule",
         widget.onlineOfflineAppBar,
       ),
@@ -43,34 +45,14 @@ class _ScheduleState extends State<Schedule> {
   Widget screenBody() {
     return TabBarView(children: [
       Container(
-        child: Center(child: Text("Tab 1")),
+        color: white,
+        child: ToDoList(),
       ),
       Container(
-        child: Center(child: ElevatedButton(child:Text("Tab 1"), onPressed:()=>dateRangePicker()),),
+        child: Center(
+          child: Schedules(widget.onlineOfflineAppBar),
+        ),
       )
     ]);
-  }
-
-  void dateRangePicker() {
-    showDateRangePicker(
-      context: context,
-      firstDate: DateTime(2021),
-      lastDate: DateTime(2021),
-    ).then((DateTimeRange value) {
-      if (value != null) {
-        DateTimeRange _fromRange = DateTimeRange(
-          start: DateTime.now(),
-          end: DateTime.now(),
-        );
-        _fromRange = value;
-        final String range =
-            '${DateFormat.yMMMd().format(_fromRange.start)} - ${DateFormat.yMMMd().format(_fromRange.end)}';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(range),
-          ),
-        );
-      }
-    });
   }
 }

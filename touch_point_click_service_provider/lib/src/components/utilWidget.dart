@@ -16,6 +16,23 @@ class UtilWidget {
     );
   }
 
+  static Widget baseCard(double height, Widget displayWidget) {
+    return Container(
+      height: height,
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10,
+              color: Colors.black26, //Color(0x802196F3),
+            )
+          ],
+          borderRadius: BorderRadius.circular(25)),
+      child: displayWidget,
+    );
+  }
+
   static void showLoadingDialog(BuildContext context, String message) {
     showDialog<void>(
       context: context,
@@ -99,4 +116,13 @@ class UtilWidget {
       content: content,
     );
   }
+
+  static ButtonStyle buttonStyle = ButtonStyle(
+    backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+    shape: MaterialStateProperty.all<OutlinedBorder>(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    ),
+  );
 }

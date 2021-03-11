@@ -113,6 +113,12 @@ class AppIconsUsed {
     color: Colors.blue,
   );
 
+  static Icon scheduleTime = Icon(
+    Icons.access_time_rounded,
+    size: 30,
+    color: Colors.red,
+  );
+
   static Icon arrivalNote = Icon(
     Icons.notes_rounded,
     size: 30,
@@ -123,5 +129,29 @@ class AppIconsUsed {
     Icons.check,
     size: 24,
     color: Colors.white,
+  );
+
+  static Icon scheduleAddIcon = Icon(
+    Icons.add_rounded,
+    size: 30,
+    color: Colors.white,
+  );
+
+  static Icon deleteIcon = Icon(
+    Icons.delete,
+    size: 24,
+    color: Colors.red,
+  );
+
+  static Icon editIcon = Icon(
+    Icons.edit,
+    size: 24,
+    color: Colors.blue,
+  );
+
+  static Icon lunchTimeIcon = Icon(
+    Icons.lunch_dining,
+    size: 24,
+    color: Colors.black,
   );
 }
