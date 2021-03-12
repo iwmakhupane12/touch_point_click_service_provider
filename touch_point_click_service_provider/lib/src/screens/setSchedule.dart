@@ -11,10 +11,6 @@ import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTex
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 
 class SetSchedule extends StatefulWidget {
-  final OnlineOfflineAppBar onlineOfflineAppBar;
-
-  SetSchedule(this.onlineOfflineAppBar);
-
   @override
   _SetScheduleState createState() => _SetScheduleState();
 
@@ -51,17 +47,7 @@ class _SetScheduleState extends State<SetSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget.defaultScreen(
-      context,
-      display(),
-      null,
-      "Set Schedule",
-      widget.onlineOfflineAppBar,
-    );
-  }
-
-  Widget display() {
-    return ListView(
+    return Column(
       children: [setDate(), setTime(), nextBtn()],
     );
   }

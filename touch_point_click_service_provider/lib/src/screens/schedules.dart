@@ -1,7 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
+import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
+import 'package:touch_point_click_service_provider/src/screens/scheduleSettings.dart';
 
 import 'package:touch_point_click_service_provider/src/screens/setSchedule.dart';
+import 'package:touch_point_click_service_provider/src/screens/dialogueDraft.dart';
 
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 
@@ -37,15 +41,23 @@ class _SchedulesState extends State<Schedules> {
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blue,
           child: AppIconsUsed.scheduleAddIcon,
-          onPressed: () => changeScreen()),
+          onPressed: () => changeScreen(false)),
     );
   }
 
-  void changeScreen() {
+  UserSchedule userSchedule =
+      UserSchedule("1", "09 Mar 2021", "15 Mar 2021", "08:00", "16:00");
+
+  void changeScreen(bool edit) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => SetSchedule(widget.onlineOfflineAppBar),
+        builder: (context) => !edit
+            ? DialogueDraft() //ScheduleSettings(onlineOfflineAppBar: widget.onlineOfflineAppBar)
+            : ScheduleSettings(
+                onlineOfflineAppBar: widget.onlineOfflineAppBar,
+                userSchedule: userSchedule,
+              ),
       ),
     );
   }
@@ -55,19 +67,9 @@ class _SchedulesState extends State<Schedules> {
   }
 
   Widget setDateTime(String date1, String date2, String time1, String time2) {
-    return Container(
-      height: 156,
-      margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10,
-              color: Colors.black26, //Color(0x802196F3),
-            )
-          ],
-          borderRadius: BorderRadius.circular(25)),
-      child: Column(
+    return UtilWidget.baseCard(
+      156,
+      Column(
         children: [
           schedulesWidgets(date1, date2, time1, time2),
         ],
@@ -115,7 +117,7 @@ class _SchedulesState extends State<Schedules> {
           child: IconButton(
               icon: AppIconsUsed.editIcon,
               onPressed: () {
-                //changeScreen();
+                changeScreen(true);
               }),
         ),
       ),
@@ -152,7 +154,7 @@ class _SchedulesState extends State<Schedules> {
                     style: TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        changeScreen();
+                        changeScreen(false);
                       }),
                 TextSpan(
                     text: "to set a schedule OR the round button below.\n\n"),

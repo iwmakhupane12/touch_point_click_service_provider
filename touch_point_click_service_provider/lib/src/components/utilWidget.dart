@@ -125,4 +125,12 @@ class UtilWidget {
       ),
     ),
   );
+
+  static ButtonStyle textButtonStyle = ButtonStyle(
+    shape: MaterialStateProperty.all<OutlinedBorder>(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    ),
+  );
 }
