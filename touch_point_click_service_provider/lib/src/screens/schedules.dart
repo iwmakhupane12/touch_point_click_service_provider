@@ -45,8 +45,21 @@ class _SchedulesState extends State<Schedules> {
     );
   }
 
-  UserSchedule userSchedule =
-      UserSchedule("1", "09 Mar 2021", "15 Mar 2021", "08:00", "16:00");
+  UserSchedule userSchedule = UserSchedule();
+
+  @override
+  void initState() {
+    super.initState();
+    dummyData();
+  }
+
+  void dummyData() {
+    userSchedule.setID("1");
+    userSchedule.setStartDate("09 Mar 2021");
+    userSchedule.setEndDate("09 Mar 2021");
+    userSchedule.setStartTime("08:00");
+    userSchedule.setEndTime("16:00");
+  }
 
   void changeScreen(bool edit) {
     Navigator.pushReplacement(

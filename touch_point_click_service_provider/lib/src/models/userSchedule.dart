@@ -1,10 +1,14 @@
 class UserSchedule {
   String _id, _startDate, _endDate, _startTime, _endTime;
-  UserSchedule(
-      this._id, this._startDate, this._endDate, this._startTime, this._endTime);
+
+  bool _autoOnline, _autoAccept;
 
   //***********Getter methods***********/
   String getID() => this._id;
+
+  bool getAutoOnline() => this._autoOnline;
+
+  bool getAutoAccept() => this._autoAccept;
 
   String getStartDate() => this._startDate;
 
@@ -16,6 +20,10 @@ class UserSchedule {
 
   //***********Setter methods***********//
   void setID(String id) => this._id = id;
+
+  void setAutoOnline(bool autoOnline) => this._autoOnline = autoOnline;
+
+  void setAutoAccept(bool autoAccept) => this._autoAccept = autoAccept;
 
   void setStartDate(String startDate) => this._startDate = startDate;
 

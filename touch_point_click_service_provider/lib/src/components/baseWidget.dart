@@ -27,6 +27,7 @@ class BaseWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 0.0,
         leading: InkWell(
           onTap: () => Navigator.pushReplacement(

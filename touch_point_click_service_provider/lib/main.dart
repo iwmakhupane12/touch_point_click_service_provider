@@ -13,7 +13,7 @@ class MyServiceProviderApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TPClick Service Provider',
       theme: ThemeData(
-        primaryColor: Colors.white,
+        primaryColor: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(),

@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        elevation: 0.0,
+        elevation: 0.0,backgroundColor: Colors.white,
         title: Text(
           "Dashboard",
           style: AppTextStyles.normalLarge(bold, black),
@@ -81,34 +81,6 @@ class _HomeState extends State<Home> {
                 PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
                     "11 Mar 2021", "17:30"),
               ),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
             ),
             currentPendingHeadings(
               PendingAccept("4111", "3427 K Section, Botshabelo, 9781",

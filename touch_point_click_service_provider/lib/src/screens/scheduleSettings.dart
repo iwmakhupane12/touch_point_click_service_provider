@@ -31,6 +31,13 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
   final Color black = Colors.black;
   final Color white = Colors.white;
 
+  String startDate, endDate;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
@@ -61,15 +68,21 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
             scheduleDisplay(),
             saveButton()
           ],
-        )
+        ),
       ],
     );
   }
 
   String dateReturn() {
     return widget.userSchedule != null
-        ? "${widget.userSchedule.getStartDate()} - ${widget.userSchedule.getEndDate()}"
+        ? "${widget.userSchedule.getStartDate()}${checkEndDate()}"
         : "Set date";
+  }
+
+  String checkEndDate() {
+    return widget.userSchedule.getEndDate() != null
+        ? " - ${widget.userSchedule.getEndDate()}"
+        : "";
   }
 
   String timeReturn() {
@@ -100,7 +113,7 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: () => setDateDialog(),
+                  onPressed: () => addRangeScreen("date"),
                   style: UtilWidget.textButtonStyle,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8.0),
@@ -111,7 +124,7 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => addRangeScreen("time"),
                   style: UtilWidget.textButtonStyle,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8.0),
@@ -125,6 +138,18 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void addRangeScreen(String setType) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return SetSchedule(
+              widget.onlineOfflineAppBar, widget.userSchedule, setType);
+        },
       ),
     );
   }
@@ -194,83 +219,6 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
           ),
         ],
       ),
-    );
-  }
-
-  int _dateRadioValue = 0;
-
-  void setDateDialog() {
-    showDialog<int>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(
-          "How to Set Date",
-          style: AppTextStyles.normalBlack(bold, black),
-        ),
-        content: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              children: [setDateRangeSingle()],
-            );
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, 0),
-            child: Text(
-              "Cancel",
-              style: AppTextStyles.normalBlack(normal, Colors.blue),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, _dateRadioValue),
-            child: Text(
-              "OK",
-              style: AppTextStyles.normalBlack(normal, Colors.blue),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  final String _byRange = "By Range";
-  final String _singular = "Singular";
-
-  Widget setDateRangeSingle() {
-    return Column(
-      children: [
-        ListTile(
-          leading: Transform.scale(
-            scale: 1.5,
-            child: Radio(
-              value: 1,
-              groupValue: _dateRadioValue,
-              onChanged: (value) {
-                setState(() {
-                  _dateRadioValue = value;
-                });
-              },
-            ),
-          ),
-          title: textToCheck(_byRange, normal),
-        ),
-        ListTile(
-          leading: Transform.scale(
-            scale: 1.5,
-            child: Radio(
-              value: 2,
-              groupValue: _dateRadioValue,
-              onChanged: (value) {
-                setState(() {
-                  _dateRadioValue = value;
-                });
-              },
-            ),
-          ),
-          title: textToCheck(_singular, normal),
-        ),
-      ],
     );
   }
 

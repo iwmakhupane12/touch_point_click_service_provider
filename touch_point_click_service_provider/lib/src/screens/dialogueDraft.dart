@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 
 class DialogueDraft extends StatefulWidget {
   @override
@@ -6,7 +7,7 @@ class DialogueDraft extends StatefulWidget {
 }
 
 class _DialogueDraftState extends State<DialogueDraft> {
-  String _selectedId;
+  int _selectedId;
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +18,18 @@ class _DialogueDraftState extends State<DialogueDraft> {
         body: new ListView(padding: const EdgeInsets.all(32.0), children: [
           new Container(
               padding: const EdgeInsets.all(10.0),
-              child: new DropdownButton<String>(
+              child: new DropdownButton<int>(
                 hint: const Text("Pick a thing"),
                 value: _selectedId,
-                onChanged: (String value) {
+                onChanged: (int value) {
                   setState(() {
                     _selectedId = value;
                   });
                 },
-                items:
-                    <String>['One', 'Two', 'Three', 'Four'].map((String value) {
-                  return new DropdownMenuItem<String>(
+                items: <int>[1, 2, 3, 4].map((int value) {
+                  return new DropdownMenuItem<int>(
                     value: value,
-                    child: new Text(value),
+                    child: new Text("$value"),
                   );
                 }).toList(),
               )),
@@ -48,7 +48,7 @@ class _DialogueDraftState extends State<DialogueDraft> {
         ));
   }
 
-  void _onValueChange(String value) {
+  void _onValueChange(int value) {
     setState(() {
       _selectedId = value;
     });
@@ -58,15 +58,15 @@ class _DialogueDraftState extends State<DialogueDraft> {
 class MyDialog extends StatefulWidget {
   const MyDialog({this.onValueChange, this.initialValue});
 
-  final String initialValue;
-  final void Function(String) onValueChange;
+  final int initialValue;
+  final void Function(int) onValueChange;
 
   @override
   State createState() => new MyDialogState();
 }
 
 class MyDialogState extends State<MyDialog> {
-  String _selectedId;
+  int _selectedId;
 
   @override
   void initState() {
@@ -78,26 +78,48 @@ class MyDialogState extends State<MyDialog> {
     return new SimpleDialog(
       title: new Text("New Dialog"),
       children: <Widget>[
-        new Container(
-            padding: const EdgeInsets.all(10.0),
-            child: new DropdownButton<String>(
-              hint: const Text("Pick a thing"),
-              value: _selectedId,
-              onChanged: (String value) {
+        ListTile(
+          leading: Transform.scale(
+            scale: 1.5,
+            child: Radio(
+              value: 1,
+              groupValue: _selectedId,
+              onChanged: (value) {
                 setState(() {
                   _selectedId = value;
                 });
                 widget.onValueChange(value);
               },
-              items:
-                  <String>['One', 'Two', 'Three', 'Four'].map((String value) {
-                return new DropdownMenuItem<String>(
-                  value: value,
-                  child: new Text(value),
-                );
-              }).toList(),
-            )),
+            ),
+          ),
+          title: textToCheck("By Range", FontWeight.normal),
+        ),
+        ListTile(
+          leading: Transform.scale(
+            scale: 1.5,
+            child: Radio(
+              value: 2,
+              groupValue: _selectedId,
+              onChanged: (value) {
+                setState(() {
+                  _selectedId = value;
+                });
+                widget.onValueChange(value);
+              },
+            ),
+          ),
+          title: textToCheck("Singular", FontWeight.normal),
+        ),
       ],
+    );
+  }
+
+  Widget textToCheck(String text, FontWeight fontWeight) {
+    return RichText(
+      text: TextSpan(
+        text: text,
+        style: AppTextStyles.normalBlack(fontWeight, Colors.black),
+      ),
     );
   }
 }
