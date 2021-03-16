@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
 
 import 'package:touch_point_click_service_provider/src/screens/schedules.dart';
@@ -31,11 +32,22 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
   final Color black = Colors.black;
   final Color white = Colors.white;
 
+  UserSchedule userSchedule;
   String startDate, endDate;
+  String startTime, endTime;
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.userSchedule != null) {
+      userSchedule = widget.userSchedule;
+
+      startDate = userSchedule.getStartDate();
+      endDate = userSchedule.getEndDate();
+      startTime = userSchedule.getStartTime();
+      endTime = userSchedule.getEndTime();
+    }
   }
 
   @override
@@ -74,20 +86,18 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
   }
 
   String dateReturn() {
-    return widget.userSchedule != null
-        ? "${widget.userSchedule.getStartDate()}${checkEndDate()}"
+    return userSchedule != null && userSchedule.getStartDate() != null
+        ? "$startDate${checkEndDate()}"
         : "Set date";
   }
 
   String checkEndDate() {
-    return widget.userSchedule.getEndDate() != null
-        ? " - ${widget.userSchedule.getEndDate()}"
-        : "";
+    return userSchedule.getEndDate() != null ? " - $endDate" : "";
   }
 
   String timeReturn() {
-    return widget.userSchedule != null
-        ? "${widget.userSchedule.getStartTime()} - ${widget.userSchedule.getEndTime()}"
+    return userSchedule != null && userSchedule.getStartTime() != null
+        ? "$startTime - $endTime"
         : "Set time";
   }
 
@@ -113,7 +123,7 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
-                  onPressed: () => addRangeScreen("date"),
+                  onPressed: () => addDateTimeRangeScreen(true),
                   style: UtilWidget.textButtonStyle,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8.0),
@@ -124,7 +134,8 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => addRangeScreen("time"),
+                  onPressed: () =>
+                      addDateTimeRangeScreen(false), // timeRangePicker(),
                   style: UtilWidget.textButtonStyle,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8.0, left: 8.0),
@@ -142,13 +153,12 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
     );
   }
 
-  void addRangeScreen(String setType) {
+  void addDateTimeRangeScreen(bool isDate) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return SetSchedule(
-              widget.onlineOfflineAppBar, widget.userSchedule, setType);
+          return SetSchedule(widget.onlineOfflineAppBar, userSchedule, isDate);
         },
       ),
     );

@@ -66,7 +66,7 @@ class _SchedulesState extends State<Schedules> {
       context,
       MaterialPageRoute(
         builder: (context) => !edit
-            ? DialogueDraft() //ScheduleSettings(onlineOfflineAppBar: widget.onlineOfflineAppBar)
+            ? ScheduleSettings(onlineOfflineAppBar: widget.onlineOfflineAppBar)
             : ScheduleSettings(
                 onlineOfflineAppBar: widget.onlineOfflineAppBar,
                 userSchedule: userSchedule,
