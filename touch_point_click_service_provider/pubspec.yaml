@@ -33,6 +33,9 @@ dependencies:
   country_calling_code_picker: ^1.0.8+1
   email_validator: ^1.0.6
   sticky_headers: ^0.1.8+1
+  intl: ^0.17.0
+  table_calendar: ^2.3.3
+  time_range_picker: ^2.0.1
 
 dev_dependencies:
   flutter_test:
