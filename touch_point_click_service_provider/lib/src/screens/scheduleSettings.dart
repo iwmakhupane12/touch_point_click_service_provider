@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/components/dateTimeConvertFunctions.dart';
 
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
 
@@ -96,9 +97,29 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
   }
 
   String timeReturn() {
-    return userSchedule != null && userSchedule.getStartTime() != null
-        ? "$startTime - $endTime"
-        : "Set time";
+    if (userSchedule != null && userSchedule.getStartTime() != null) {
+      if (!userSchedule.getStartTime().contains("/")) {
+        return "$startTime - $endTime";
+      } else {
+        return "$startTime";
+      }
+    } else {
+      return "Set time";
+    }
+  }
+
+//Time that has passed, will be continued as an update
+  bool timeHasPassed = false;
+
+  bool checkIfTimePassed(String endTime) {
+    String timeOfDay = DateTimeConvert.addZeroToTime(
+        "${TimeOfDay.now().hour}", "${TimeOfDay.now().minute}");
+    int intTimeOfDay = int.parse(timeOfDay.replaceAll(":", ""));
+    int intEndTime = int.parse(endTime.replaceAll(":", ""));
+    if (intTimeOfDay >= intEndTime) {
+      timeHasPassed = true;
+    }
+    return timeHasPassed;
   }
 
   Widget scheduleDisplay() {

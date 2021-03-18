@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
+import 'package:touch_point_click_service_provider/src/components/dateTimeConvertFunctions.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
@@ -45,8 +46,11 @@ class _SetScheduleState extends State<SetSchedule> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      Column(
-        children: [isDate ? setDate() : setTime(), nextBtn()],
+      ListView(
+        children: [
+          isDate ? setDate() : setTime(),
+          nextBtn(),
+        ],
       ),
       null,
       "Schedule Settings",
@@ -133,80 +137,42 @@ class _SetScheduleState extends State<SetSchedule> {
 
   String startTime, endTime;
 
-  List<String> splitTime(String time) {
-    return time.split(':').toList();
-  }
-
-  int startEndHoursRangePicker(String time, String end) {
-    //For start time
-    if (time != null && end == null) {
-      return int.parse(splitTime(time).first);
-    } else if (time == null && end == null) {
-      return TimeOfDay.now().hour;
-    } else {
-      int endHour = TimeOfDay.now().hour + 3;
-      if (endHour >= 24) {
-        endHour = 0 + (endHour - 24); //Setting time to 24 hours
-      }
-      return endHour; //No time set and its for end time
-    }
-  }
-
-  int startEndMinutesRangePicker(String time, String end) {
-    //For end time
-    return time != null && end == null
-        ? int.parse(splitTime(time).last)
-        : TimeOfDay.now().minute;
-  }
-
-  String addZeroToTime(String hours, String minutes) {
-    if (hours.length <= 1) {
-      hours = "0$hours";
-    }
-
-    if (minutes.length <= 1) {
-      minutes = "0$minutes";
-    }
-
-    return "$hours:$minutes";
-  }
-
   void timeRangePicker() async {
     TimeRange result = await showTimeRangePicker(
       context: context,
       start: TimeOfDay(
-          hour: startEndHoursRangePicker(startTime, null),
-          minute: startEndMinutesRangePicker(startTime, null)),
+          hour: DateTimeConvert.initStartEndHoursRangePicker(startTime, null),
+          minute:
+              DateTimeConvert.initStartEndMinutesRangePicker(startTime, null)),
       end: TimeOfDay(
-          hour: startEndHoursRangePicker(endTime, "end"),
-          minute: startEndMinutesRangePicker(endTime, "end")),
+          hour: DateTimeConvert.initStartEndHoursRangePicker(endTime, "end"),
+          minute:
+              DateTimeConvert.initStartEndMinutesRangePicker(endTime, "end")),
       use24HourFormat: true,
+      disabledTime: TimeRange(
+          startTime: TimeOfDay(hour: 23, minute: 55),
+          endTime: TimeOfDay(hour: 24, minute: 05)),
       //interval: Duration(hours: 24, minutes: 00),
     );
     if (result != null) {
-      startTime = addZeroToTime(
+      startTime = DateTimeConvert.addZeroToTime(
           "${result.startTime.hour}", "${result.startTime.minute}");
-      endTime =
-          addZeroToTime("${result.endTime.hour}", "${result.endTime.minute}");
+      endTime = DateTimeConvert.addZeroToTime(
+          "${result.endTime.hour}", "${result.endTime.minute}");
 
-      setState(() {
-        if (widget.userSchedule != null) {
-          userSchedule.setStartTime(startTime);
-          userSchedule.setEndTime(endTime);
-        } else {
-          userSchedule = UserSchedule();
-          userSchedule.setStartTime(startTime);
-          userSchedule.setEndTime(endTime);
-        }
-      });
+      if (startTime != endTime) {
+        setTimeState(startTime, endTime);
 
-      save();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("$startTime - $endTime"),
-        ),
-      );
+        save();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("You Cannot Choose Equal Times"),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
@@ -281,22 +247,10 @@ class _SetScheduleState extends State<SetSchedule> {
         final String range =
             '${dateFormated(_fromRange.start)} - ${dateFormated(_fromRange.end)}';
 
-        if (widget.userSchedule != null) {
-          userSchedule.setStartDate(dateFormated(_fromRange.start));
-          userSchedule.setEndDate(dateFormated(_fromRange.end));
-        } else {
-          userSchedule = UserSchedule();
-          userSchedule.setStartDate(dateFormated(_fromRange.start));
-          userSchedule.setEndDate(dateFormated(_fromRange.end));
-        }
+        setDateState(
+            dateFormated(_fromRange.start), dateFormated(_fromRange.end));
 
         save();
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(range),
-          ),
-        );
       }
     });
   }
@@ -330,22 +284,9 @@ class _SetScheduleState extends State<SetSchedule> {
           DateTime _fromDate = DateTime.now();
           _fromDate = value;
 
-          if (widget.userSchedule != null) {
-            userSchedule.setStartDate(dateFormated(_fromDate));
-            userSchedule.setEndDate(null);
-          } else {
-            userSchedule = UserSchedule();
-            userSchedule.setStartDate(dateFormated(_fromDate));
-            userSchedule.setEndDate(null);
-          }
+          setDateState(dateFormated(_fromDate), null);
 
           save();
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(dateFormated(_fromDate)),
-            ),
-          );
         }
       },
     );
@@ -363,10 +304,52 @@ class _SetScheduleState extends State<SetSchedule> {
     }
   }
 
+  void setDateState(String dateStart, String dateEnd) {
+    if (widget.userSchedule != null) {
+      userSchedule.setStartDate(dateStart);
+      userSchedule.setEndDate(dateEnd);
+    } else {
+      userSchedule = UserSchedule();
+      userSchedule.setStartDate(dateStart);
+      userSchedule.setEndDate(dateEnd);
+    }
+  }
+
+  void setTimeState(String timeStart, String timeEnd) {
+    setState(() {
+      if (widget.userSchedule != null) {
+        userSchedule.setStartTime(timeStart);
+        userSchedule.setEndTime(timeEnd);
+      } else {
+        userSchedule = UserSchedule();
+        userSchedule.setStartTime(timeStart);
+        userSchedule.setEndTime(timeEnd);
+      }
+    });
+  }
+
   void timePickerCheck() {
     if (_radioValue == 1) {
       timeRangePicker();
     } else {
+      switch (_radioValue) {
+        case 2:
+          {
+            setTimeState(_twentyFourFive, null);
+          }
+          break;
+        case 3:
+          {
+            setTimeState(_twentyFourSix, null);
+          }
+          break;
+        case 4:
+          {
+            setTimeState(_twentyFourSeven, null);
+          }
+          break;
+      }
+
       save();
     }
   }

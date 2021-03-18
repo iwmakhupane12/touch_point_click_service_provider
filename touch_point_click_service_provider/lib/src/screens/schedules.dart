@@ -56,7 +56,7 @@ class _SchedulesState extends State<Schedules> {
   void dummyData() {
     userSchedule.setID("1");
     userSchedule.setStartDate("09 Mar 2021");
-    userSchedule.setEndDate("09 Mar 2021");
+    userSchedule.setEndDate("15 Mar 2021");
     userSchedule.setStartTime("08:00");
     userSchedule.setEndTime("16:00");
   }
