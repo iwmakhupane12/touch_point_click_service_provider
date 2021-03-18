@@ -245,18 +245,14 @@ class _SetScheduleState extends State<SetSchedule> {
         );
         _fromRange = value;
         final String range =
-            '${dateFormated(_fromRange.start)} - ${dateFormated(_fromRange.end)}';
+            '${DateTimeConvert.dateFormated(_fromRange.start)} - ${DateTimeConvert.dateFormated(_fromRange.end)}';
 
-        setDateState(
-            dateFormated(_fromRange.start), dateFormated(_fromRange.end));
+        setDateState(DateTimeConvert.dateFormated(_fromRange.start),
+            DateTimeConvert.dateFormated(_fromRange.end));
 
         save();
       }
     });
-  }
-
-  String dateFormated(DateTime fromRange) {
-    return '${DateFormat.d().format(fromRange)} ${DateFormat.MMM().format(fromRange)} ${DateFormat.y().format(fromRange)}';
   }
 
   void save() {
@@ -284,7 +280,7 @@ class _SetScheduleState extends State<SetSchedule> {
           DateTime _fromDate = DateTime.now();
           _fromDate = value;
 
-          setDateState(dateFormated(_fromDate), null);
+          setDateState(DateTimeConvert.dateFormated(_fromDate), null);
 
           save();
         }

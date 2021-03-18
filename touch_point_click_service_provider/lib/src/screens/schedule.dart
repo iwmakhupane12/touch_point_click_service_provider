@@ -32,7 +32,7 @@ class _ScheduleState extends State<Schedule> {
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
-      child: BaseWidget.defaultScreen(
+      child: BaseWidget.defaultScreenNoCurve(
         context,
         screenBody(),
         AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Schedules"),

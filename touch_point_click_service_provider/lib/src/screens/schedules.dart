@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
 import 'package:touch_point_click_service_provider/src/screens/scheduleSettings.dart';
@@ -29,19 +30,21 @@ class _SchedulesState extends State<Schedules> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.appBackgroundColor,
-      body: ListView(
-        children: [
-          schedulesAvailable
-              ? setDateTime("09 Mar 2021", "15 Mar 2021", "08:00", "16:00")
-              : viewText(),
-        ],
+    return BaseWidget.clipedBase(
+      Scaffold(
+        backgroundColor: AppColors.appBackgroundColor,
+        body: ListView(
+          children: [
+            schedulesAvailable
+                ? setDateTime("09 Mar 2021", "15 Mar 2021", "08:00", "16:00")
+                : viewText(),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.blue,
+            child: AppIconsUsed.scheduleAddIcon,
+            onPressed: () => changeScreen(false)),
       ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blue,
-          child: AppIconsUsed.scheduleAddIcon,
-          onPressed: () => changeScreen(false)),
     );
   }
 

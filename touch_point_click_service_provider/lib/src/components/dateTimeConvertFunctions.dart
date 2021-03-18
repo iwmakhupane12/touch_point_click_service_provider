@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DateTimeConvert {
   ///////////////////Time Functions///////////////////
@@ -44,4 +45,7 @@ class DateTimeConvert {
   }
 
   ///////////////////Date Functions///////////////////
+  static String dateFormated(DateTime fromRange) {
+    return '${DateFormat.d().format(fromRange)} ${DateFormat.MMM().format(fromRange)} ${DateFormat.y().format(fromRange)}';
+  }
 }
