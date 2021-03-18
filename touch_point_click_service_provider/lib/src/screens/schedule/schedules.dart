@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
-import 'package:touch_point_click_service_provider/src/screens/scheduleSettings.dart';
-
-import 'package:touch_point_click_service_provider/src/screens/setSchedule.dart';
-import 'package:touch_point_click_service_provider/src/screens/dialogueDraft.dart';
+import 'package:touch_point_click_service_provider/src/screens/schedule/scheduleSettings.dart';
 
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 

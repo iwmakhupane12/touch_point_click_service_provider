@@ -4,13 +4,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 
-import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/dateTimeConvertFunctions.dart';
-import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
 class ToDoList extends StatefulWidget {
   @override

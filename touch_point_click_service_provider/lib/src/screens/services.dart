@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
-import 'package:touch_point_click_service_provider/src/components/dashRequests.dart';
-import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
-
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 
 class Services extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;

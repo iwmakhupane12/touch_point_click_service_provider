@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
         height: MediaQuery.of(context).size.height * 1,
         width: MediaQuery.of(context).size.width * 1,
         decoration: BoxDecoration(
-          color: AppTextStyles.txtCursorColor,
+          color: Colors.blue,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

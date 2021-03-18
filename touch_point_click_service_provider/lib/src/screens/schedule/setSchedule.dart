@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
-
 import 'package:time_range_picker/time_range_picker.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
@@ -11,7 +9,7 @@ import 'package:touch_point_click_service_provider/src/components/utilWidget.dar
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
-import 'package:touch_point_click_service_provider/src/screens/scheduleSettings.dart';
+import 'package:touch_point_click_service_provider/src/screens/schedule/scheduleSettings.dart';
 
 class SetSchedule extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -244,9 +242,8 @@ class _SetScheduleState extends State<SetSchedule> {
           end: DateTime.now(),
         );
         _fromRange = value;
-        final String range =
-            '${DateTimeConvert.dateFormated(_fromRange.start)} - ${DateTimeConvert.dateFormated(_fromRange.end)}';
-
+        /*final String range =
+            '${DateTimeConvert.dateFormated(_fromRange.start)} - ${DateTimeConvert.dateFormated(_fromRange.end)}';*/
         setDateState(DateTimeConvert.dateFormated(_fromRange.start),
             DateTimeConvert.dateFormated(_fromRange.end));
 

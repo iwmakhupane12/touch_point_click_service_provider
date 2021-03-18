@@ -9,7 +9,6 @@ import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTex
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/draft.dart';
 import 'package:touch_point_click_service_provider/src/screens/profile.dart';
 import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
@@ -51,7 +50,8 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        elevation: 0.0,backgroundColor: Colors.white,
+        elevation: 0.0,
+        backgroundColor: Colors.white,
         title: Text(
           "Dashboard",
           style: AppTextStyles.normalLarge(bold, black),
@@ -302,12 +302,12 @@ class _HomeState extends State<Home> {
   }
 
   void changeScreen() {
-    Navigator.pushReplacement(
+    /*Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => Draft(),
       ),
-    );
+    );*/
   }
 
   Widget companyDetails(
