@@ -221,22 +221,6 @@ abstract class AppTextStyles {
     bottom: 10.0,
   );
 
-  static InputDecoration txtInputDecor(
-      String txtHintText, Icon txtPrefixIcon, IconButton txtSuffixIconButton) {
-    return InputDecoration(
-      filled: true,
-      fillColor: Colors.white,
-      hintText: txtHintText,
-      hintStyle: TextStyle(color: AppTextStyles.textHintColor),
-      suffixIcon: txtSuffixIconButton,
-      prefixIcon: txtPrefixIcon,
-      border: OutlineInputBorder(
-        borderSide: BorderSide.none,
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-    );
-  }
-
   static InputDecoration txtProfileInputDecor(
       String txtHintText, Icon txtPrefixIcon, IconButton txtSuffixIconButton) {
     return InputDecoration(

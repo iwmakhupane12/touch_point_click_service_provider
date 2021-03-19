@@ -53,6 +53,7 @@ class _SetScheduleState extends State<SetSchedule> {
       null,
       "Schedule Settings",
       widget.onlineOfflineAppBar,
+      null,
     );
   }
 

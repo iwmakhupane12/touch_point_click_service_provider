@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
+
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/textShaderMask.dart';
 
@@ -15,6 +17,7 @@ class _OnlineOfflineAppBarState extends State<OnlineOfflineAppBar> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      elevation: 0.0,
       child: Container(
         height: 50,
         child: !_dismissed ? goOnlineBtn() : goOfflineBtn(),
@@ -29,20 +32,17 @@ class _OnlineOfflineAppBarState extends State<OnlineOfflineAppBar> {
         alignment: Alignment.bottomCenter,
         child: Container(
           height: 50.0,
+          color: Colors.red,
           width: MediaQuery.of(context).size.width * 1,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.red)),
-            onPressed: () {},
-            child: TextShaderMask(
-                btnText: "Slide To Go Offline", dismissed: _dismissed),
-          ),
+          child: TextShaderMask(
+              btnText: "Slide To Go Offline", dismissed: _dismissed),
         ),
       ),
       onDismissed: (direction) {
         btnPressed("Offline");
       },
-      background: Container(alignment: Alignment.center, color: Colors.blue),
+      background: Container(
+          alignment: Alignment.center, color: AppColors.appBackgroundColor),
     );
   }
 
@@ -53,24 +53,17 @@ class _OnlineOfflineAppBarState extends State<OnlineOfflineAppBar> {
         alignment: Alignment.bottomCenter,
         child: Container(
           height: 50.0,
+          color: Colors.blue,
           width: MediaQuery.of(context).size.width * 1,
-          child: TextButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
-            onPressed: () {
-              setState(() {
-                //_loading = !_loading;
-              });
-            },
-            child: TextShaderMask(
-                btnText: "Slide To Go Online", dismissed: _dismissed),
-          ),
+          child: TextShaderMask(
+              btnText: "Slide To Go Online", dismissed: _dismissed),
         ),
       ),
       onDismissed: (direction) {
         btnPressed("Online");
       },
-      background: Container(alignment: Alignment.center, color: Colors.red),
+      background: Container(
+          alignment: Alignment.center, color: AppColors.appBackgroundColor),
     );
   }
 
@@ -82,16 +75,19 @@ class _OnlineOfflineAppBarState extends State<OnlineOfflineAppBar> {
       setState(() {
         _dismissed = !_dismissed;
       });
-      userChangedStatus("Online");
+      userChangedStatus(status);
     });
   }
 
-  Widget userChangedStatus(String status) {
-    return SnackBar(
-      content: Text("You are now $status"),
-      action: SnackBarAction(
-        label: "Undo",
-        onPressed: () {}, //Update User Status in the database
+  void userChangedStatus(String status) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("You are now $status"),
+        behavior: SnackBarBehavior.floating,
+        action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {}, //Update User Status in the database
+        ),
       ),
     );
   }

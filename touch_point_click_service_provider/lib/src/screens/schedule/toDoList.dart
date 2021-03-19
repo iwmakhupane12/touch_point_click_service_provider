@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 
 import 'package:touch_point_click_service_provider/src/components/dateTimeConvertFunctions.dart';
+import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
 class ToDoList extends StatefulWidget {
   @override
@@ -41,57 +43,64 @@ class _ToDoListState extends State<ToDoList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xff30384c),
-      child: ListView(
-        children: [
-          Container(
-            color: white,
-            child: Column(
-              children: [
-                Divider(),
-                TableCalendar(
-                  calendarController: _calendarController,
-                  onDaySelected: (date, events, holidays) {
-                    setHeaderState();
-                  },
-                  initialCalendarFormat: CalendarFormat.week,
-                  availableCalendarFormats: const {
-                    CalendarFormat.week: 'Week',
-                  },
-                  initialSelectedDay: _calendarController.selectedDay,
-                  formatAnimation: FormatAnimation.slide,
-                  calendarStyle: CalendarStyle(
-                    outsideDaysVisible: true,
-                    weekendStyle: AppTextStyles.normalBlackSmall(normal, red),
-                    holidayStyle: AppTextStyles.normalBlackSmall(normal, red),
-                    weekdayStyle: AppTextStyles.normalBlackSmall(normal, black),
-                    outsideStyle:
-                        AppTextStyles.normalBlackSmall(normal, blackGrey),
-                    outsideHolidayStyle:
-                        AppTextStyles.normalBlackSmall(normal, blackGrey),
-                    outsideWeekendStyle:
-                        AppTextStyles.normalBlackSmall(normal, redGrey),
-                    todayColor: blueGrey,
-                    selectedColor: blueAccent,
+    return UtilWidget.clipRectForApp(
+      Container(
+        decoration: BoxDecoration(
+          color: AppColors.appBackgroundColor, //Color(0xff30384c),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        ),
+        child: ListView(
+          children: [
+            Container(
+              color: white,
+              child: Column(
+                children: [
+                  Divider(),
+                  TableCalendar(
+                    calendarController: _calendarController,
+                    onDaySelected: (date, events, holidays) {
+                      setHeaderState();
+                    },
+                    initialCalendarFormat: CalendarFormat.week,
+                    availableCalendarFormats: const {
+                      CalendarFormat.week: 'Week',
+                    },
+                    initialSelectedDay: _calendarController.selectedDay,
+                    formatAnimation: FormatAnimation.slide,
+                    calendarStyle: CalendarStyle(
+                      outsideDaysVisible: true,
+                      weekendStyle: AppTextStyles.normalBlackSmall(normal, red),
+                      holidayStyle: AppTextStyles.normalBlackSmall(normal, red),
+                      weekdayStyle:
+                          AppTextStyles.normalBlackSmall(normal, black),
+                      outsideStyle:
+                          AppTextStyles.normalBlackSmall(normal, blackGrey),
+                      outsideHolidayStyle:
+                          AppTextStyles.normalBlackSmall(normal, blackGrey),
+                      outsideWeekendStyle:
+                          AppTextStyles.normalBlackSmall(normal, redGrey),
+                      todayColor: blueGrey,
+                      selectedColor: blueAccent,
+                    ),
+                    headerStyle: HeaderStyle(
+                      centerHeaderTitle: true,
+                      formatButtonVisible: false,
+                      titleTextStyle: AppTextStyles.normalBlack(bold, black),
+                      rightChevronIcon: AppIconsUsed.iosForwardArrowRounded,
+                      leftChevronIcon: AppIconsUsed.iosBackwardArrowRounded,
+                    ),
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                      weekdayStyle: AppTextStyles.normalBlackSmall(bold, black),
+                      weekendStyle: AppTextStyles.normalBlackSmall(bold, red),
+                    ),
                   ),
-                  headerStyle: HeaderStyle(
-                    centerHeaderTitle: true,
-                    formatButtonVisible: false,
-                    titleTextStyle: AppTextStyles.normalBlack(bold, black),
-                    rightChevronIcon: AppIconsUsed.iosForwardArrowRounded,
-                    leftChevronIcon: AppIconsUsed.iosBackwardArrowRounded,
-                  ),
-                  daysOfWeekStyle: DaysOfWeekStyle(
-                    weekdayStyle: AppTextStyles.normalBlackSmall(bold, black),
-                    weekendStyle: AppTextStyles.normalBlackSmall(bold, red),
-                  ),
-                ),
-                eventsDisplay(),
-              ],
+                  eventsDisplay(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -99,7 +108,7 @@ class _ToDoListState extends State<ToDoList> {
   Widget eventsDisplay() {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xff30384c),
+        color: AppColors.appBackgroundColor, //Color(0xff30384c),
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
@@ -116,7 +125,7 @@ class _ToDoListState extends State<ToDoList> {
       header: Container(
         height: 50.0,
         decoration: BoxDecoration(
-          color: Color(0xff30384c),
+          color: AppColors.appBackgroundColor, //Color(0xff30384c),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25)),
         ),
@@ -124,7 +133,7 @@ class _ToDoListState extends State<ToDoList> {
         alignment: Alignment.centerLeft,
         child: Text(
           clickedDate,
-          style: AppTextStyles.normalLarge(bold, white),
+          style: AppTextStyles.normalLarge(bold, black),
           overflow: TextOverflow.ellipsis,
         ),
       ),
@@ -147,75 +156,51 @@ class _ToDoListState extends State<ToDoList> {
   }
 
   Widget events() {
-    return Column(
-      children: [
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-        event("3427 K Section, Botshabelo, 9781", "15:30"),
-      ],
-    );
-  }
-
-  Widget event(String address, String time) {
-    return Material(
-      color: Colors.transparent,
+    return Container(
       child: Column(
         children: [
-          Divider(color: Colors.white24),
-          InkWell(
-            onTap: () {},
-            child: ListTile(
-              title: Text(
-                address,
-                style: AppTextStyles.normalBlack(normal, white),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text("Time: $time",
-                  style: AppTextStyles.normalBlackSmall(normal, Colors.white70),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis),
-              leading: Icon(
-                Icons.event,
-                color: Colors.lightBlue,
-                size: 30.0,
-              ),
-              trailing: AppIconsUsed.iosForwardArrowWhite,
-            ),
-          ),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
+          event("3427 K Section, Botshabelo, 9781", "15:30"),
         ],
       ),
     );
   }
 
-  /*Widget event(String address, String time) {
+  Widget event(String address, String time) {
     return UtilWidget.baseCard(
-      60,
-      Center(
-        child: ListTile(
-          title: Text(
-            address,
-            style: AppTextStyles.normalBlack(normal, black),
+      null,
+      Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {},
+          borderRadius: BorderRadius.circular(25.0),
+          child: ListTile(
+            title: Text(
+              address,
+              style: AppTextStyles.normalBlack(normal, black),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text("Time: $time",
+                style: AppTextStyles.normalGreyishSmall(),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis),
+            leading: Icon(
+              Icons.event,
+              color: blue,
+              size: 30.0,
+            ),
+            trailing: AppIconsUsed.iosForwardArrow,
           ),
-          subtitle: Text(
-            "Time: $time",
-            style: AppTextStyles.normalBlackSmall(
-                normal, Colors.black), //AppTextStyles.normalGreyishSmall(),
-          ),
-          leading: Icon(
-            Icons.event,
-            color: blue,
-            size: 30.0,
-          ),
-          trailing: AppIconsUsed.iosForwardArrow,
         ),
       ),
     );
-  }*/
+  }
 }

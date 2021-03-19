@@ -29,7 +29,7 @@ class _ScheduleState extends State<Schedule> {
       child: BaseWidget.defaultScreenNoCurve(
         context,
         screenBody(),
-        AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Schedules"),
+        AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Set Schedule"),
         "Schedule",
         widget.onlineOfflineAppBar,
       ),
