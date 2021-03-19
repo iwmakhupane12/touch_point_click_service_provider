@@ -16,13 +16,13 @@ class _ReportsState extends State<Reports> {
   @override
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
-      context,
-      Container(
-        child: Center(child: Text("Services")),
-      ),
-      null,
-      "Services",
-      widget.onlineOfflineAppBar,
-    );
+        context,
+        Container(
+          child: Center(child: Text("Services")),
+        ),
+        null,
+        "Services",
+        widget.onlineOfflineAppBar,
+        null);
   }
 }

@@ -133,4 +133,20 @@ class UtilWidget {
       ),
     ),
   );
+
+  static InputDecoration txtInputDecor(
+      String txtHintText, Icon txtPrefixIcon, IconButton txtSuffixIconButton) {
+    return InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
+      hintText: txtHintText,
+      hintStyle: TextStyle(color: Colors.grey),
+      suffixIcon: txtSuffixIconButton,
+      prefixIcon: txtPrefixIcon,
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+    );
+  }
 }

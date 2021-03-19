@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 /*CircularProgressIndicator(
                   backgroundColor: Colors.white,
                 ),*/
-                Padding(
+                /*Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 8.0),
                   child: Flex(direction: Axis.horizontal, children: <Widget>[
                     Expanded(
@@ -96,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                     ),
                   ]),
-                ),
+                ),*/
                 SizedBox(height: 20.0)
               ],
             ),
