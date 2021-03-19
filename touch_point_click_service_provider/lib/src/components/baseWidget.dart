@@ -23,7 +23,8 @@ class BaseWidget {
       Widget displayBody,
       Widget bottomWidget,
       String appBarTitle,
-      OnlineOfflineAppBar onlineOfflineAppBar) {
+      OnlineOfflineAppBar onlineOfflineAppBar,
+      FloatingActionButton floatingActionButton) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -53,6 +54,7 @@ class BaseWidget {
         displayBody,
       ),
       bottomNavigationBar: onlineOfflineAppBar,
+      floatingActionButton: floatingActionButton,
     );
   }
 

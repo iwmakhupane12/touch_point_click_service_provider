@@ -3,19 +3,14 @@ import 'package:touch_point_click_service_provider/src/components/dateTimeConver
 
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/schedules.dart';
-import 'package:touch_point_click_service_provider/src/screens/setSchedule.dart';
-import 'package:touch_point_click_service_provider/src/screens/toDoList.dart';
+import 'package:touch_point_click_service_provider/src/screens/schedule/setSchedule.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
-import 'package:touch_point_click_service_provider/src/components/dashRequests.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
-import 'package:touch_point_click_service_provider/src/components/appBarTabs.dart';
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 
 class ScheduleSettings extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -59,6 +54,7 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
       null,
       "Schedule Settings",
       widget.onlineOfflineAppBar,
+      null,
     );
   }
 

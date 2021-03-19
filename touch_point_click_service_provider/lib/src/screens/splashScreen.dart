@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
         height: MediaQuery.of(context).size.height * 1,
         width: MediaQuery.of(context).size.width * 1,
         decoration: BoxDecoration(
-          color: AppTextStyles.txtCursorColor,
+          color: Colors.blue,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 /*CircularProgressIndicator(
                   backgroundColor: Colors.white,
                 ),*/
-                Padding(
+                /*Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 8.0),
                   child: Flex(direction: Axis.horizontal, children: <Widget>[
                     Expanded(
@@ -96,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                     ),
                   ]),
-                ),
+                ),*/
                 SizedBox(height: 20.0)
               ],
             ),

@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/schedules.dart';
-import 'package:touch_point_click_service_provider/src/screens/toDoList.dart';
+import 'package:touch_point_click_service_provider/src/screens/schedule/schedules.dart';
+import 'package:touch_point_click_service_provider/src/screens/schedule/toDoList.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
-import 'package:touch_point_click_service_provider/src/components/dashRequests.dart';
-import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/appBarTabs.dart';
-
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 
 class Schedule extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -35,7 +29,7 @@ class _ScheduleState extends State<Schedule> {
       child: BaseWidget.defaultScreenNoCurve(
         context,
         screenBody(),
-        AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Schedules"),
+        AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Set Schedule"),
         "Schedule",
         widget.onlineOfflineAppBar,
       ),

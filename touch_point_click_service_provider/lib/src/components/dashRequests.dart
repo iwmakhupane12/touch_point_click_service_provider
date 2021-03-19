@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
-import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
-import 'package:touch_point_click_service_provider/src/components/dashRequests.dart';
-
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 
 class PendingAccept extends StatefulWidget {
   final String requestNumber, requestDate, requestTime, requestAddress;

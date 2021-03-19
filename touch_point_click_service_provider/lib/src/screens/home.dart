@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/dashRequests.dart';
+import 'package:touch_point_click_service_provider/src/components/requestComp.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
+import 'package:touch_point_click_service_provider/src/models/setAndReturnModels.dart';
+import 'package:touch_point_click_service_provider/src/models/userRequest.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/draft.dart';
 import 'package:touch_point_click_service_provider/src/screens/profile.dart';
 import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
@@ -43,6 +45,7 @@ class _HomeState extends State<Home> {
     } else {
       onlineOfflineAppBar = widget.onlineOfflineAppBar;
     }
+    fillUserRequestList();
   }
 
   @override
@@ -51,7 +54,8 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        elevation: 0.0,backgroundColor: Colors.white,
+        elevation: 0.0,
+        backgroundColor: Colors.white,
         title: Text(
           "Dashboard",
           style: AppTextStyles.normalLarge(bold, black),
@@ -70,21 +74,11 @@ class _HomeState extends State<Home> {
             dashGrid(),
             UtilWidget.stickyHeader(
               currentRequests,
-              currentPendingHeadings(
-                PendingAccept("4110", "3427 K Section, Botshabelo, 9781",
-                    "10 Mar 2021", "16:09"),
-              ),
+              RequestComp(userRequestList.elementAt(1)).request(),
             ),
             UtilWidget.stickyHeader(
               pendingRequests,
-              currentPendingHeadings(
-                PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                    "11 Mar 2021", "17:30"),
-              ),
-            ),
-            currentPendingHeadings(
-              PendingAccept("4111", "3427 K Section, Botshabelo, 9781",
-                  "11 Mar 2021", "17:30"),
+              getPendingRequests(),
             ),
           ],
         ),
@@ -93,13 +87,35 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget currentPendingHeadings(Widget requests) {
+/*
+  Widget currentPendingHeadings() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int i) {
+        return RequestComp.request();
+      },
+    );
+  }*/
+
+  Widget dashGrid() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [requests],
+      children: [
+        Row(
+          children: <Widget>[
+            gridItem('assets/images/dashboard/request.png', "requests"),
+            gridItem('assets/images/dashboard/schedule.png', "schedule"),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            gridItem('assets/images/dashboard/services.png', "services"),
+            gridItem('assets/images/dashboard/report.png', "reports"),
+          ],
+        ),
+      ],
     );
   }
-
+/*
   Widget dashGrid() {
     return Container(
       height: 410,
@@ -115,6 +131,25 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }*/
+
+  List<UserRequest> userRequestList = [];
+
+  void fillUserRequestList() {
+    for (int i = 0; i < 10; i++) {
+      userRequestList.add(
+        SetAndReturnModels.userRequest("$i", "Itumeleng Makhupane",
+            "3427 K Section, Botshabelo, 9781", "18 Mar 2021", "16:10", "$i"),
+      );
+    }
+  }
+
+  Widget getPendingRequests() {
+    List<Widget> list = [];
+    for (int i = 0; i < userRequestList.length; i++) {
+      list.add(RequestComp(userRequestList.elementAt(i)).request());
+    }
+    return new Column(children: list);
   }
 
   void navToScreen(String dashTabs) {
@@ -155,14 +190,31 @@ class _HomeState extends State<Home> {
     );
   }
 
+  double deviceWidth, deviceHeight;
+
+  /*double checkForPortrait() {
+    MediaQuery.of(context).orientation;
+  }*/
+  //Determine if its a tablet or not
+  double determineDeviceDimensions() {
+    deviceWidth = MediaQuery.of(context).size.width;
+    deviceHeight = MediaQuery.of(context).size.height;
+
+    if (deviceWidth > deviceHeight) {
+      return deviceHeight;
+    } else {
+      return deviceWidth;
+    }
+  }
+
   Widget gridItem(String imageID, String dashTabs) {
     return InkWell(
       onTap: () {
         navToScreen(dashTabs);
       },
       child: Container(
-        height: 50,
-        width: 50,
+        height: determineDeviceDimensions() * 0.45,
+        width: determineDeviceDimensions() * 0.45,
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: white,
@@ -225,7 +277,7 @@ class _HomeState extends State<Home> {
                           ),
                           companyDetails("4.3", "200+", "10"),
                           Text(
-                            "View Profile",
+                            "Go To Settings",
                             overflow: TextOverflow.ellipsis,
                             style: AppTextStyles.normalBlackSmall(
                                 FontWeight.normal, AppColors.appBlueColor),
@@ -302,12 +354,12 @@ class _HomeState extends State<Home> {
   }
 
   void changeScreen() {
-    Navigator.pushReplacement(
+    /*Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => Draft(),
       ),
-    );
+    );*/
   }
 
   Widget companyDetails(
