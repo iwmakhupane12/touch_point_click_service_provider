@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
+import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/models/userRequest.dart';
+import 'package:touch_point_click_service_provider/src/screens/requests/pastRequest.dart';
 
 class RequestComp {
   static final FontWeight normal = FontWeight.normal;
@@ -11,16 +13,17 @@ class RequestComp {
   static final Color white = Colors.white;
 
   UserRequest userRequest;
-  RequestComp(this.userRequest);
+  OnlineOfflineAppBar onlineOfflineAppBar;
+  RequestComp(this.userRequest, this.onlineOfflineAppBar);
 
-  Widget request() {
+  Widget request(BuildContext context) {
     return UtilWidget.baseCard(
       160,
       Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(25.0),
-          onTap: () {},
+          onTap: () => changeScreen(context),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -42,6 +45,15 @@ class RequestComp {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void changeScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PastRequest(onlineOfflineAppBar),
       ),
     );
   }

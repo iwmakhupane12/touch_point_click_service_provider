@@ -43,9 +43,7 @@ class _ScheduleState extends State<Schedule> {
         child: ToDoList(),
       ),
       Container(
-        child: Center(
-          child: Schedules(widget.onlineOfflineAppBar),
-        ),
+        child: Schedules(widget.onlineOfflineAppBar),
       )
     ]);
   }

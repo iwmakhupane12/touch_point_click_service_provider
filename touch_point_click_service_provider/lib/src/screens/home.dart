@@ -74,7 +74,8 @@ class _HomeState extends State<Home> {
             dashGrid(),
             UtilWidget.stickyHeader(
               currentRequests,
-              RequestComp(userRequestList.elementAt(1)).request(),
+              RequestComp(userRequestList.elementAt(1), onlineOfflineAppBar)
+                  .request(context),
             ),
             UtilWidget.stickyHeader(
               pendingRequests,
@@ -147,7 +148,8 @@ class _HomeState extends State<Home> {
   Widget getPendingRequests() {
     List<Widget> list = [];
     for (int i = 0; i < userRequestList.length; i++) {
-      list.add(RequestComp(userRequestList.elementAt(i)).request());
+      list.add(RequestComp(userRequestList.elementAt(i), onlineOfflineAppBar)
+          .request(context));
     }
     return new Column(children: list);
   }

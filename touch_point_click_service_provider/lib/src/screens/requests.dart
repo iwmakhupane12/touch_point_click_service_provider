@@ -42,12 +42,12 @@ class _RequestsState extends State<Requests> {
       length: 2,
       initialIndex: 0,
       child: BaseWidget.defaultScreen(
-        context,
-        screenBody(),
-        AppBarTabs.twoAppBarBottomTabs("Upcoming", "Past"),
-        "Requests",
-        widget.onlineOfflineAppBar,null
-      ),
+          context,
+          screenBody(),
+          AppBarTabs.twoAppBarBottomTabs("Upcoming", "Past"),
+          "Requests",
+          widget.onlineOfflineAppBar,
+          null),
     );
   }
 
@@ -82,7 +82,9 @@ class _RequestsState extends State<Requests> {
   Widget getRequests() {
     List<Widget> list = [];
     for (int i = 0; i < userRequestList.length; i++) {
-      list.add(RequestComp(userRequestList.elementAt(i)).request());
+      list.add(
+          RequestComp(userRequestList.elementAt(i), widget.onlineOfflineAppBar)
+              .request(context));
     }
     return new ListView(children: list);
   }
