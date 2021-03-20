@@ -70,6 +70,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       appBarTitle,
       widget.onlineOfflineAppBar,
       null,
+      null,
     );
   }
 

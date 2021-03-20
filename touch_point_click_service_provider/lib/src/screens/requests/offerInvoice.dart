@@ -23,6 +23,7 @@ class _OfferInvoiceState extends State<OfferInvoice> {
       "Request",
       widget.onlineOfflineAppBar,
       null,
+      null,
     );
   }
 

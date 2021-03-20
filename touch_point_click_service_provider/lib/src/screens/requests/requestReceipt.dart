@@ -115,12 +115,12 @@ class _RequestReceiptState extends State<RequestReceipt> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        amountText("R550", normal),
-        amountText("R5", normal),
-        amountText("R20", normal),
+        amountText(": R550", normal),
+        amountText(": R5", normal),
+        amountText(": R20", normal),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
-          child: amountText("R575", bold),
+          child: amountText(": R575", bold),
         ),
       ],
     );

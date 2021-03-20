@@ -24,7 +24,8 @@ class BaseWidget {
       Widget bottomWidget,
       String appBarTitle,
       OnlineOfflineAppBar onlineOfflineAppBar,
-      FloatingActionButton floatingActionButton) {
+      FloatingActionButton floatingActionButton,
+      List<Widget> actions) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -49,6 +50,7 @@ class BaseWidget {
           style: AppTextStyles.normalBlack(FontWeight.normal, Colors.black),
         ),
         bottom: bottomWidget,
+        actions: actions,
       ),
       body: BaseWidget.clipedBase(
         displayBody,

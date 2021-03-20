@@ -42,12 +42,14 @@ class _RequestsState extends State<Requests> {
       length: 2,
       initialIndex: 0,
       child: BaseWidget.defaultScreen(
-          context,
-          screenBody(),
-          AppBarTabs.twoAppBarBottomTabs("Upcoming", "Past"),
-          "Requests",
-          widget.onlineOfflineAppBar,
-          null),
+        context,
+        screenBody(),
+        AppBarTabs.twoAppBarBottomTabs("Upcoming", "Past"),
+        "Requests",
+        widget.onlineOfflineAppBar,
+        null,
+        null,
+      ),
     );
   }
 
