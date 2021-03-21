@@ -131,6 +131,12 @@ class AppIconsUsed {
     color: Colors.black,
   );
 
+  static Icon cardPayment = Icon(
+    Icons.credit_card_rounded,
+    size: 30,
+    color: Colors.teal[800],
+  );
+
   static Icon timeLineCheck = Icon(
     Icons.check,
     size: 24,

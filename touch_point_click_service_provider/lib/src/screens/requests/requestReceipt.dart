@@ -15,7 +15,7 @@ class _RequestReceiptState extends State<RequestReceipt> {
 
   Widget stickyHeader() {
     return UtilWidget.stickyHeader(
-      "3427 K Section Botshabelo, 9781",
+      "Request Id: 45632",
       Column(
         children: [
           services(),

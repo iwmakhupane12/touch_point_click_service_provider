@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:touch_point_click_service_provider/src/components/appBarTabs.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 
+import 'package:touch_point_click_service_provider/src/screens/requests/requestDetails.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests/requestReceipt.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests/requestInvoice.dart';
+import 'package:touch_point_click_service_provider/src/screens/requests/requestTracking.dart';
 
 class PastRequest extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -47,15 +50,9 @@ class _PastRequestState extends State<PastRequest> {
   Widget screenBody() {
     return TabBarView(
       children: [
-        Container(
-          child: Center(child: Text("Tracking")),
-        ),
+        RequestTracking(),
         RequestInvoice(), //RequestReceipt(),
-        Container(
-          child: Center(
-            child: Text("Details"),
-          ),
-        ),
+        RequestDetails(),
       ],
     );
   }
