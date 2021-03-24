@@ -51,7 +51,7 @@ class _PastRequestState extends State<PastRequest> {
   Widget screenBody() {
     return TabBarView(
       children: [
-        RequestTracking(),
+        RequestTracking(widget.onlineOfflineAppBar),
         RequestInvoice(), //RequestReceipt(),
         RequestDetails(),
       ],
@@ -83,7 +83,6 @@ class _PastRequestState extends State<PastRequest> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
-        InvoiceUpdate(onlineOfflineAppBar: widget.onlineOfflineAppBar);
         switch (value) {
           case updatePayment:
             {
