@@ -15,13 +15,14 @@ class SetAndReturnModels {
   }
 
   static UserService userService(String id, String category, String serviceDesc,
-      String price, String estTime) {
+      String price, String estTime, String chargeType) {
     UserService us = UserService();
     us.setID(id);
     us.setCategory(category);
     us.setServiceDesc(serviceDesc);
     us.setPrice(price);
     us.setEstTime(estTime);
+    us.setChargeType(chargeType);
     return us;
   }
 }

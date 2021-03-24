@@ -24,6 +24,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   List<DropdownMenuItem<String>> _dropDownMenuItems;
 
   String appBarTitle = "Service Details";
+  String _radioValue;
 
   TextEditingController serviceController,
       categoryController,
@@ -41,6 +42,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       categoryController.text = userService.getCategory();
       priceController.text = userService.getPrice();
       estTimeController.text = userService.getEstTime();
+      _radioValue = userService.getChargeType();
     }
   }
 
@@ -51,6 +53,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       userService = widget.userService;
     } else {
       appBarTitle = "Add Service";
+      _radioValue = firstValue;
     }
 
     if (widget.categories != null) {
@@ -94,13 +97,73 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         Align(
             alignment: Alignment.centerRight, child: categoriesDisplayButton()),
         textHeading("Price in Rands:"),
-        textFieldView(priceController,
-            TextInputType.numberWithOptions(decimal: true), "e.g. 150"),
+        UtilWidget.baseCard(
+          null,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              textHeading("Price:"),
+              textFieldView(priceController,
+                  TextInputType.numberWithOptions(decimal: true), "e.g. 150"),
+              textHeading("How to charge:"),
+              chooseChargeType(),
+            ],
+          ),
+        ),
         textHeading("Estimated Time to complete in minutes:"),
         textFieldView(estTimeController,
             TextInputType.numberWithOptions(decimal: false), "e.g. 60"),
         saveButton(),
       ],
+    );
+  }
+
+  String firstValue = "For Entire Service";
+  String secondValue = "Per Hour";
+
+  Widget chooseChargeType() {
+    return Column(
+      children: [
+        ListTile(
+          leading: Transform.scale(
+            scale: 1.5,
+            child: Radio(
+              value: firstValue,
+              groupValue: _radioValue,
+              onChanged: (value) {
+                setState(() {
+                  _radioValue = value;
+                });
+              },
+            ),
+          ),
+          title: textToCheck(firstValue, normal),
+        ),
+        ListTile(
+          leading: Transform.scale(
+            scale: 1.5,
+            child: Radio(
+              value: secondValue,
+              groupValue: _radioValue,
+              onChanged: (value) {
+                setState(() {
+                  _radioValue = value;
+                });
+              },
+            ),
+          ),
+          title: textToCheck(secondValue, normal),
+        ),
+      ],
+    );
+  }
+
+  Widget textToCheck(String text, FontWeight fontWeight) {
+    return RichText(
+      text: TextSpan(
+        text: text,
+        style: AppTextStyles.normalBlack(fontWeight, black),
+      ),
     );
   }
 
