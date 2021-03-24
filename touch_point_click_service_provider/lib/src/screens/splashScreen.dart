@@ -6,10 +6,9 @@ import 'package:country_calling_code_picker/picker.dart';
 
 //import 'package:firebase_core/firebase_core.dart';
 
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/textStyles.dart';
 import 'package:touch_point_click_service_provider/src/components/loadingPopUp.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/home.dart';
+import 'package:touch_point_click_service_provider/src/screens/signInUp.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -28,17 +27,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void initCountry(String userCallCode) async {
     final country = await getCountryByCountryCode(context, userCallCode);
-    setState(() {
-      _userCountry = country;
-    });
-    Timer(Duration(seconds: 5), () => changeScreen());
+    if (country != null) {
+      setState(() {
+        _userCountry = country;
+      });
+      Timer(Duration(seconds: 5), () => changeScreen());
+    }
   }
 
   void changeScreen() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Home(),
+        builder: (context) => SignInUp(_userCountry),
       ),
     );
   }
