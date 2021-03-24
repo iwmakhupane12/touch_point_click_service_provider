@@ -374,12 +374,7 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.only(top: 2.0),
             child: Text(
                 //"4.3 (200+) \u00B7 10km away"
-                companyRating +
-                    " (" +
-                    companyRatedNumber +
-                    ") \u00B7 " +
-                    companyDistance +
-                    "km away",
+                companyRating + " (" + companyRatedNumber + ")",
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.normalBlackSmallSmall(
                     FontWeight.normal, Colors.grey[600])),
