@@ -276,7 +276,6 @@ class _HomeState extends State<Home> {
                           ),
                         ]),
                     Spacer(flex: 2),
-                    AppIconsUsed.iosForwardArrowWhite,
                   ],
                 ),
               ),
