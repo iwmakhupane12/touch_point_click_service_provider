@@ -21,6 +21,11 @@ class AppIconsUsed {
     color: Colors.black,
   );
 
+  static Icon circularPersonIcon = Icon(
+    Icons.account_circle_outlined,
+    color: Colors.black,
+  );
+
   static Icon phoneIcon = Icon(
     Icons.phone_android_outlined,
     color: Colors.black,
@@ -63,6 +68,30 @@ class AppIconsUsed {
     Icons.star_rounded,
     size: 18.0,
     color: Colors.yellow,
+  );
+
+  static Icon circularStar = Icon(
+    Icons.stars_outlined,
+    color: Colors.black,
+    size: 30,
+  );
+
+  static Icon supportIcon = Icon(
+    Icons.support_agent_outlined,
+    color: Colors.black,
+    size: 30,
+  );
+
+  static Icon aboutIcon = Icon(
+    Icons.help_outline_sharp,
+    color: Colors.black,
+    size: 30,
+  );
+
+  static Icon logoutIcon = Icon(
+    Icons.logout,
+    color: Colors.black,
+    size: 30,
   );
 
   static Icon forwardArrow = Icon(
@@ -129,6 +158,12 @@ class AppIconsUsed {
     Icons.notes_rounded,
     size: 30,
     color: Colors.black,
+  );
+
+  static Icon cardPayment = Icon(
+    Icons.credit_card_rounded,
+    size: 30,
+    color: Colors.teal[800],
   );
 
   static Icon timeLineCheck = Icon(

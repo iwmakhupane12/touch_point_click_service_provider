@@ -51,36 +51,39 @@ class _ServicesState extends State<Services> {
     //Category 1
     userServiceList.add(
       SetAndReturnModels.userService(
-          "1", "Sciences", "Mathematics", "200", "60"),
+          "1", "Sciences", "Mathematics", "200", "60", "Per Hour"),
     );
     userServiceList.add(
       SetAndReturnModels.userService(
-          "2", "Sciences", "Physical Sciences", "180", "60"),
+          "2", "Sciences", "Physical Sciences", "180", "60", "Per Hour"),
     );
     userServiceList.add(
       SetAndReturnModels.userService(
-          "3", "Sciences", "Life Scieces", "150", "60"),
+          "3", "Sciences", "Life Scieces", "150", "60", "Per Hour"),
     );
     userServiceList.add(
-      SetAndReturnModels.userService("4", "Sciences", "Geography", "150", "60"),
+      SetAndReturnModels.userService(
+          "4", "Sciences", "Geography", "150", "60", "Per Hour"),
     );
 
     //Category 2
     userServiceList.add(
       SetAndReturnModels.userService(
-          "5", "Commerce", "Accounting", "200", "60"),
+          "5", "Commerce", "Accounting", "200", "60", "Per Hour"),
     );
     userServiceList.add(
       SetAndReturnModels.userService(
-          "6", "Commerce", "Business Studies", "150", "60"),
+          "6", "Commerce", "Business Studies", "150", "60", "Per Hour"),
     );
     userServiceList.add(
-      SetAndReturnModels.userService("7", "Commerce", "Economics", "150", "60"),
+      SetAndReturnModels.userService(
+          "7", "Commerce", "Economics", "150", "60", "Per Hour"),
     );
 
     //Category 3
     userServiceList.add(
-      SetAndReturnModels.userService("8", "Histories", "History", "150", "60"),
+      SetAndReturnModels.userService(
+          "8", "Histories", "History", "150", "60", "Per Hour"),
     );
   }
 
@@ -100,6 +103,7 @@ class _ServicesState extends State<Services> {
       "Services",
       widget.onlineOfflineAppBar,
       floatingActionButton(),
+      null,
     );
   }
 
@@ -118,10 +122,14 @@ class _ServicesState extends State<Services> {
       for (int j = 0; j < userServiceList.length; j++) {
         if (userServiceList.elementAt(j).getCategory() ==
             categoriesList.elementAt(i)) {
-          tempServicesList.add(service(
+          tempServicesList.add(
+            service(
               j,
               userServiceList.elementAt(j).getServiceDesc(),
-              userServiceList.elementAt(j).getPrice()));
+              userServiceList.elementAt(j).getPrice(),
+              userServiceList.elementAt(j).getChargeType(),
+            ),
+          );
         }
       }
 
@@ -164,7 +172,8 @@ class _ServicesState extends State<Services> {
     );
   }
 
-  Widget service(int serviceListIndex, String serviceDesc, String price) {
+  Widget service(int serviceListIndex, String serviceDesc, String price,
+      String chargeType) {
     int index = serviceListIndex;
     return UtilWidget.baseCard(
       null,
@@ -178,8 +187,8 @@ class _ServicesState extends State<Services> {
             child: ListTile(
               title: Text(serviceDesc,
                   style: AppTextStyles.normalBlack(normal, black)),
-              subtitle:
-                  Text("R$price", style: AppTextStyles.normalGreyishSmall()),
+              subtitle: Text("R$price \u00B7 $chargeType",
+                  style: AppTextStyles.normalGreyishSmall()),
               trailing: AppIconsUsed.iosForwardArrowRounded,
             ),
           ),

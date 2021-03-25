@@ -10,9 +10,6 @@ import 'package:touch_point_click_service_provider/src/components/utilWidget.dar
 import 'package:touch_point_click_service_provider/src/models/setAndReturnModels.dart';
 import 'package:touch_point_click_service_provider/src/models/userRequest.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/requests/past.dart';
-import 'package:touch_point_click_service_provider/src/screens/requests/upcoming.dart';
-
 class Requests extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
 
@@ -46,7 +43,9 @@ class _RequestsState extends State<Requests> {
         screenBody(),
         AppBarTabs.twoAppBarBottomTabs("Upcoming", "Past"),
         "Requests",
-        widget.onlineOfflineAppBar,null
+        widget.onlineOfflineAppBar,
+        null,
+        null,
       ),
     );
   }
@@ -82,7 +81,9 @@ class _RequestsState extends State<Requests> {
   Widget getRequests() {
     List<Widget> list = [];
     for (int i = 0; i < userRequestList.length; i++) {
-      list.add(RequestComp(userRequestList.elementAt(i)).request());
+      list.add(
+          RequestComp(userRequestList.elementAt(i), widget.onlineOfflineAppBar)
+              .request(context));
     }
     return new ListView(children: list);
   }

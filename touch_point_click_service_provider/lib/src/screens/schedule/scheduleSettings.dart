@@ -55,27 +55,32 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
       "Schedule Settings",
       widget.onlineOfflineAppBar,
       null,
+      null,
     );
   }
 
   Widget display() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10.0),
-          child: textHolder("Automations"),
-        ),
-        settings(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: textHolder("Schedule"),
+              child: textHolder("Automations"),
             ),
-            scheduleDisplay(),
-            saveButton()
+            settings(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: textHolder("Schedule"),
+                ),
+                scheduleDisplay(),
+                saveButton()
+              ],
+            ),
           ],
         ),
       ],
