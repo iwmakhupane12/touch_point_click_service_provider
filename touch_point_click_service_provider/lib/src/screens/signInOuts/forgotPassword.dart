@@ -61,11 +61,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Padding(
               padding: padding,
               child: UtilWidget.txtInputText(
-                "info@tpclick.co.za",
-                AppIconsUsed.emailIcon,
-                emailController,
-                TextInputType.emailAddress,
-              ),
+                  "info@tpclick.co.za",
+                  AppIconsUsed.emailIcon,
+                  emailController,
+                  TextInputType.emailAddress,
+                  true),
             ),
             headerText("Phone Number"),
             Padding(

@@ -77,11 +77,11 @@ class _SignUpState extends State<SignUp> {
           Padding(
             padding: padding,
             child: UtilWidget.txtInputText(
-              "Touchpoint Click Pty(Ltd)",
-              AppIconsUsed.personIcon,
-              _providerName,
-              TextInputType.text,
-            ),
+                "Touchpoint Click Pty(Ltd)",
+                AppIconsUsed.personIcon,
+                _providerName,
+                TextInputType.text,
+                true),
           ),
           headerText("Phone Number"),
           Padding(
@@ -97,11 +97,11 @@ class _SignUpState extends State<SignUp> {
           Padding(
             padding: padding,
             child: UtilWidget.txtInputText(
-              "info@tpclick.co.za",
-              AppIconsUsed.emailIcon,
-              _emailController,
-              TextInputType.emailAddress,
-            ),
+                "info@tpclick.co.za",
+                AppIconsUsed.emailIcon,
+                _emailController,
+                TextInputType.emailAddress,
+                true),
           ),
           headerText("Password"),
           Padding(

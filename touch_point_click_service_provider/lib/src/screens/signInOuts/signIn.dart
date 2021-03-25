@@ -59,11 +59,11 @@ class _SignInState extends State<SignIn> {
             Padding(
               padding: padding,
               child: UtilWidget.txtInputText(
-                "info@tpclick.co.za",
-                AppIconsUsed.emailIcon,
-                emailController,
-                TextInputType.emailAddress,
-              ),
+                  "info@tpclick.co.za",
+                  AppIconsUsed.emailIcon,
+                  emailController,
+                  TextInputType.emailAddress,
+                  true),
             ),
             headerText("Password"),
             Padding(

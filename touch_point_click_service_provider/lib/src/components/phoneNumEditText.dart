@@ -33,7 +33,7 @@ class _PhoneNumEditTextState extends State<PhoneNumEditText> {
             "071 456 7892",
             null,
             _controller,
-            TextInputType.phone,
+            TextInputType.phone,true
           ),
         ),
       ],

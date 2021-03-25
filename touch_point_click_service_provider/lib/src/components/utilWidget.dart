@@ -134,13 +134,18 @@ class UtilWidget {
     ),
   );
 
-  static Widget txtInputText(String txtHint, Icon txtIcons,
-      TextEditingController controller, TextInputType textInputType) {
+  static Widget txtInputText(
+      String txtHint,
+      Icon txtIcons,
+      TextEditingController controller,
+      TextInputType textInputType,
+      bool enabled) {
     return Card(
       elevation: 10.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       child: TextField(
         controller: controller,
+        enabled: enabled,
         keyboardType: textInputType,
         style: TextStyle(fontSize: 20, height: 1.0),
         decoration: UtilWidget.txtInputDecor(txtHint, txtIcons, null),

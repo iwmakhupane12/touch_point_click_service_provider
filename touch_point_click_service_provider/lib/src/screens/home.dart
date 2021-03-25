@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
+import 'package:touch_point_click_service_provider/src/components/dashDrawer.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/dashRequests.dart';
 import 'package:touch_point_click_service_provider/src/components/requestComp.dart';
@@ -13,6 +14,7 @@ import 'package:touch_point_click_service_provider/src/models/setAndReturnModels
 import 'package:touch_point_click_service_provider/src/models/userRequest.dart';
 
 import 'package:touch_point_click_service_provider/src/screens/profile.dart';
+import 'package:touch_point_click_service_provider/src/screens/profile/profileSettings.dart';
 import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests.dart';
@@ -30,6 +32,8 @@ class Home extends StatefulWidget {
 OnlineOfflineAppBar onlineOfflineAppBar;
 
 class _HomeState extends State<Home> {
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
   FontWeight bold = FontWeight.bold;
   FontWeight normal = FontWeight.normal;
   Color black = Colors.black;
@@ -51,6 +55,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -85,6 +90,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       bottomNavigationBar: onlineOfflineAppBar,
+      drawer: DashDrawer(onlineOfflineAppBar),
     );
   }
 
@@ -116,23 +122,6 @@ class _HomeState extends State<Home> {
       ],
     );
   }
-/*
-  Widget dashGrid() {
-    return Container(
-      height: 410,
-      child: GridView.count(
-        physics: NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        primary: false,
-        children: [
-          gridItem('assets/images/dashboard/request.png', "requests"),
-          gridItem('assets/images/dashboard/schedule.png', "schedule"),
-          gridItem('assets/images/dashboard/services.png', "services"),
-          gridItem('assets/images/dashboard/report.png', "reports"),
-        ],
-      ),
-    );
-  }*/
 
   List<UserRequest> userRequestList = [];
 
@@ -163,7 +152,7 @@ class _HomeState extends State<Home> {
           switch (dashTabs) {
             case "profile":
               {
-                return Profile();
+                return ProfileSettings(onlineOfflineAppBar);
               }
               break;
             case "requests":
@@ -239,7 +228,8 @@ class _HomeState extends State<Home> {
   Widget homeProfile() {
     return InkWell(
       onTap: () {
-        navToScreen("profile");
+        //navToScreen("profile");
+        _scaffoldKey.currentState.openDrawer();
       },
       child: UtilWidget.baseCard(
         50,
@@ -279,7 +269,7 @@ class _HomeState extends State<Home> {
                           ),
                           companyDetails("4.3", "200+", "10"),
                           Text(
-                            "Go To Settings",
+                            "Open Drawer Menu",
                             overflow: TextOverflow.ellipsis,
                             style: AppTextStyles.normalBlackSmall(
                                 FontWeight.normal, AppColors.appBlueColor),

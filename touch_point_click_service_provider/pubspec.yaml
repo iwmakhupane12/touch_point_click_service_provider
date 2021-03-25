@@ -37,6 +37,7 @@ dependencies:
   table_calendar: ^2.3.3
   time_range_picker: ^2.0.1
   configurable_expansion_tile: ^1.0.0
+  images_picker: ^0.0.7
 
 dev_dependencies:
   flutter_test:
