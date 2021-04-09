@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "75179941891",
+    "project_id": "touchpointclickdemo",
+    "storage_bucket": "touchpointclickdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75179941891:android:c6ec1af846a742cfd6ee36",
+        "android_client_info": {
+          "package_name": "com.touchpointclick.touch_point_click"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75179941891-rglnd9ed850acslrj4eq208k8enet6k5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL04RpcpcsS4ygyvb31dmeexT0NOSlRZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75179941891-rglnd9ed850acslrj4eq208k8enet6k5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

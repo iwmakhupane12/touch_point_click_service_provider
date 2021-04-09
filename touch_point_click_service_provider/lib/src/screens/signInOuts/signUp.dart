@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,8 @@ import 'package:touch_point_click_service_provider/src/components/baseWidget.dar
 import 'package:touch_point_click_service_provider/src/components/passwordTextEdit.dart';
 import 'package:touch_point_click_service_provider/src/components/phoneNumEditText.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
+import 'package:touch_point_click_service_provider/src/components/validateInput.dart';
+import 'package:touch_point_click_service_provider/src/screens/home.dart';
 
 class SignUp extends StatefulWidget {
   final Country country;
@@ -20,7 +24,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  TextEditingController _providerName,
+  TextEditingController _providerNameController,
       _phoneNumController,
       _altPhoneNumController,
       _emailController,
@@ -37,6 +41,8 @@ class _SignUpState extends State<SignUp> {
   final Color black = Colors.black;
   final Color white = Colors.white;
 
+  bool absorb = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,7 +54,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   void initControllers() {
-    _providerName = TextEditingController();
+    _providerNameController = TextEditingController();
     _phoneNumController = TextEditingController();
     _altPhoneNumController = TextEditingController();
     _emailController = TextEditingController();
@@ -58,7 +64,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void dispose() {
-    _providerName.dispose();
+    _providerNameController.dispose();
     _phoneNumController.dispose();
     _altPhoneNumController.dispose();
     _emailController.dispose();
@@ -70,52 +76,73 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget.clipedBase(
-      ListView(
-        children: [
-          headerText("Service Provider Name"),
-          Padding(
-            padding: padding,
-            child: UtilWidget.txtInputText(
-                "Touchpoint Click Pty(Ltd)",
-                AppIconsUsed.personIcon,
-                _providerName,
-                TextInputType.text,
-                true),
-          ),
-          headerText("Phone Number"),
-          Padding(
-            padding: padding,
-            child: phoneNumEditText,
-          ),
-          headerText("Alternative Phone Number"),
-          Padding(
-            padding: padding,
-            child: altPhoneNumEditText,
-          ),
-          headerText("Email Address"),
-          Padding(
-            padding: padding,
-            child: UtilWidget.txtInputText(
-                "info@tpclick.co.za",
-                AppIconsUsed.emailIcon,
-                _emailController,
-                TextInputType.emailAddress,
-                true),
-          ),
-          headerText("Password"),
-          Padding(
-            padding: padding,
-            child: PasswordTextEdit(_passwordController),
-          ),
-          headerText("Coonfirm Password"),
-          Padding(
-            padding: padding,
-            child: PasswordTextEdit(_confirmPasswordController),
-          ),
-          signUpButton(),
-          signUpDisclaimer(),
-        ],
+    return AbsorbPointer(
+      absorbing: absorb,
+      child: BaseWidget.clipedBase(
+        ListView(
+          children: [
+            headerText("Service Provider Name*"),
+            Padding(
+              padding: padding,
+              child: UtilWidget.txtInputText(
+                  "Touchpoint Click Pty(Ltd)",
+                  AppIconsUsed.personIcon,
+                  _providerNameController,
+                  TextInputType.text,
+                  true),
+            ),
+            blnName
+                ? Container()
+                : ValidateInput.errorText(
+                    "Service Provider's Name ${ValidateInput.errorTextNull}"),
+            headerText("Phone Number*"),
+            Padding(
+              padding: padding,
+              child: phoneNumEditText,
+            ),
+            blnPhone
+                ? Container()
+                : ValidateInput.errorText(
+                    "Phone Number ${ValidateInput.errorTextNull}"),
+            headerText("Alternative Phone Number"),
+            Padding(
+              padding: padding,
+              child: altPhoneNumEditText,
+            ),
+            headerText("Email Address*"),
+            Padding(
+              padding: padding,
+              child: UtilWidget.txtInputText(
+                  "info@tpclick.co.za",
+                  AppIconsUsed.emailIcon,
+                  _emailController,
+                  TextInputType.emailAddress,
+                  true),
+            ),
+            blnEmail
+                ? Container()
+                : ValidateInput.errorText(ValidateInput.invalidEmail),
+            headerText("Password*"),
+            Padding(
+              padding: padding,
+              child: PasswordTextEdit(_passwordController),
+            ),
+            blnPassword
+                ? Container()
+                : ValidateInput.errorText(ValidateInput.errorTextPassword),
+            headerText("Confirm Password*"),
+            Padding(
+              padding: padding,
+              child: PasswordTextEdit(_confirmPasswordController),
+            ),
+            blnConfirm
+                ? Container()
+                : ValidateInput.errorText(
+                    ValidateInput.errorTextPasswordConform),
+            signUpButton(),
+            signUpDisclaimer(),
+          ],
+        ),
       ),
     );
   }
@@ -134,13 +161,63 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  void checkControllers() {
-    print("Name: ${_providerName.text}");
-    print("Phone Number: ${_phoneNumController.text}");
-    print("Alternative Phone Number: ${_altPhoneNumController.text}");
-    print("Email Address: ${_emailController.text}");
-    print("Password: ${_passwordController.text}");
-    print("Confirm Password: ${_confirmPasswordController.text}");
+  void changeToHome() {
+    UtilWidget.showLoadingDialog(context, "Signing Up...");
+    Timer(Duration(seconds: 2), () {
+      Navigator.pop(context);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
+      );
+      /*setState(() {
+        absorb = false;
+      });*/
+    });
+  }
+
+  bool blnName = true,
+      blnPhone = true,
+      blnEmail = true,
+      blnPassword = true,
+      blnConfirm = true;
+
+  bool validateLogin() {
+    if (ValidateInput.validateText(_providerNameController.text)) {
+      setState(() => blnName = false);
+      return false;
+    }
+
+    if (ValidateInput.validateText(_phoneNumController.text)) {
+      setState(() => blnPhone = false);
+      return false;
+    }
+
+    if (ValidateInput.validateEmail(_emailController.text)) {
+      setState(() => blnEmail = false);
+      return false;
+    }
+
+    if (ValidateInput.validatePasswordLength(_passwordController.text)) {
+      setState(() => blnPassword = false);
+      return false;
+    }
+
+    if (ValidateInput.validatePasswordMatch(
+        _passwordController.text, _confirmPasswordController.text)) {
+      setState(() => blnConfirm = false);
+      return false;
+    }
+
+    return true;
+  }
+
+  void setAbsorbState(bool state) {
+    setState(() {
+      absorb = state;
+    });
   }
 
   Widget signUpButton() {
@@ -150,8 +227,12 @@ class _SignUpState extends State<SignUp> {
         height: 50,
         child: ElevatedButton(
           onPressed: () {
-            //changeScreen();
-            checkControllers();
+            if (validateLogin()) {
+              setAbsorbState(true);
+              changeToHome();
+            } else {
+              setAbsorbState(false);
+            }
           },
           style: UtilWidget.buttonStyle,
           child: Text(

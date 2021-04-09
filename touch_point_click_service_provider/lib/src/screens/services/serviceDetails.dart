@@ -74,6 +74,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       widget.onlineOfflineAppBar,
       null,
       null,
+      false,
     );
   }
 

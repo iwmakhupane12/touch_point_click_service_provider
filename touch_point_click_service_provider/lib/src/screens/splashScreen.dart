@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:country_calling_code_picker/country.dart';
 import 'package:country_calling_code_picker/picker.dart';
 
-//import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:touch_point_click_service_provider/src/components/loadingPopUp.dart';
 
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    //Firebase.initializeApp();
+    Firebase.initializeApp();
     initCountry('ZA');
   }
 

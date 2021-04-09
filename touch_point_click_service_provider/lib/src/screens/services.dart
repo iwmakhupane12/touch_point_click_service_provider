@@ -104,6 +104,7 @@ class _ServicesState extends State<Services> {
       widget.onlineOfflineAppBar,
       floatingActionButton(),
       null,
+      true,
     );
   }
 

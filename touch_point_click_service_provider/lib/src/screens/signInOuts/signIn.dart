@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:country_calling_code_picker/country.dart';
@@ -8,6 +10,7 @@ import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTex
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/passwordTextEdit.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
+import 'package:touch_point_click_service_provider/src/components/validateInput.dart';
 import 'package:touch_point_click_service_provider/src/screens/home.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests/currentRequest.dart';
 import 'package:touch_point_click_service_provider/src/screens/signInOuts/forgotPassword.dart';
@@ -22,7 +25,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  bool _showLoginPassword = false;
   TextEditingController signInPasswordController, emailController;
   Country _country;
 
@@ -31,6 +33,8 @@ class _SignInState extends State<SignIn> {
 
   final Color black = Colors.black;
   final Color white = Colors.white;
+
+  bool absorb = false;
 
   @override
   void initState() {
@@ -50,33 +54,41 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget.clipedBase(
-      Container(
-        //color: Colors.white,
-        child: ListView(
-          children: [
-            headerText("Email Address"),
-            Padding(
-              padding: padding,
-              child: UtilWidget.txtInputText(
-                  "info@tpclick.co.za",
-                  AppIconsUsed.emailIcon,
-                  emailController,
-                  TextInputType.emailAddress,
-                  true),
-            ),
-            headerText("Password"),
-            Padding(
-              padding: padding,
-              child: PasswordTextEdit(signInPasswordController),
-            ),
-            forgotPassword(),
-            signInButton()
-          ],
+    return AbsorbPointer(
+      absorbing: absorb,
+      child: BaseWidget.clipedBase(
+        Container(
+          //color: Colors.white,
+          child: ListView(
+            children: [
+              headerText("Email Address"),
+              Padding(
+                padding: padding,
+                child: UtilWidget.txtInputText(
+                    "info@tpclick.co.za",
+                    AppIconsUsed.emailIcon,
+                    emailController,
+                    TextInputType.emailAddress,
+                    true),
+              ),
+              headerText("Password"),
+              Padding(
+                padding: padding,
+                child: PasswordTextEdit(signInPasswordController),
+              ),
+              creditialsIncorrect
+                  ? ValidateInput.errorText(ValidateInput.incorrectCredintials)
+                  : Container(),
+              forgotPassword(),
+              signInButton(),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  bool creditialsIncorrect = false;
 
   static const EdgeInsets padding = EdgeInsets.symmetric(horizontal: 10.0);
 
@@ -126,6 +138,23 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  void changeToHome() {
+    UtilWidget.showLoadingDialog(context, "Signing In...");
+    Timer(Duration(seconds: 2), () {
+      Navigator.pop(context);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
+      );
+      /*setState(() {
+        absorb = false;
+      });*/
+    });
+  }
+
   Widget signInButton() {
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -133,12 +162,10 @@ class _SignInState extends State<SignIn> {
         height: 50,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ),
-            );
+            setState(() {
+              absorb = true;
+            });
+            changeToHome();
           },
           style: UtilWidget.buttonStyle,
           child: Text(

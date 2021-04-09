@@ -71,6 +71,7 @@ class _ProfileState extends State<Profile> {
       widget.onlineOfflineAppBar,
       null,
       actions,
+      true,
     );
   }
 
@@ -185,27 +186,44 @@ class _ProfileState extends State<Profile> {
   Widget profileNotVerified() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            "Your account is not verified",
-            style: AppTextStyles.normalBlack(normal, Colors.red),
-            overflow: TextOverflow.ellipsis,
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: UtilWidget.buttonStyle,
-            child: Text(
-              "Verify Now",
-              style: AppTextStyles.normalBlackSmall(normal, white),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          verificationRow("Account"),
+          verificationRow("Phone number"),
+          verificationRow("Email address"),
         ],
       ),
     );
   }
+
+  Widget verificationRow(String verify) {
+    String whichVeri = verify;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            "$whichVeri is not verified",
+            style: AppTextStyles.normalBlack(normal, Colors.red),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            verificationClicked(whichVeri);
+          },
+          style: UtilWidget.buttonStyle,
+          child: Text(
+            "Verify Now",
+            style: AppTextStyles.normalBlackSmall(normal, white),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void verificationClicked(String whichVeri) {}
 
   Widget headerText(String text) {
     return Padding(

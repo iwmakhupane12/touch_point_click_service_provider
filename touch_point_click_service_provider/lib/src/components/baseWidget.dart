@@ -19,26 +19,30 @@ class BaseWidget {
   }
 
   static Widget defaultScreen(
-      BuildContext context,
-      Widget displayBody,
-      Widget bottomWidget,
-      String appBarTitle,
-      OnlineOfflineAppBar onlineOfflineAppBar,
-      FloatingActionButton floatingActionButton,
-      List<Widget> actions) {
+    BuildContext context,
+    Widget displayBody,
+    Widget bottomWidget,
+    String appBarTitle,
+    OnlineOfflineAppBar onlineOfflineAppBar,
+    FloatingActionButton floatingActionButton,
+    List<Widget> actions,
+    bool toHome,
+  ) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
         leading: InkWell(
-          onTap: () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  Home(onlineOfflineAppBar: onlineOfflineAppBar),
-            ),
-          ),
+          onTap: () => toHome
+              ? Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Home(onlineOfflineAppBar: onlineOfflineAppBar),
+                  ),
+                )
+              : Navigator.pop(context),
           child: Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.black,
@@ -65,20 +69,23 @@ class BaseWidget {
       Widget displayBody,
       Widget bottomWidget,
       String appBarTitle,
-      OnlineOfflineAppBar onlineOfflineAppBar) {
+      OnlineOfflineAppBar onlineOfflineAppBar,
+      bool toHome) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
         leading: InkWell(
-          onTap: () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  Home(onlineOfflineAppBar: onlineOfflineAppBar),
-            ),
-          ),
+          onTap: () => toHome
+              ? Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Home(onlineOfflineAppBar: onlineOfflineAppBar),
+                  ),
+                )
+              : Navigator.pop(context),
           child: Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.black,

@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
-
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 
-class Reports extends StatefulWidget {
+class UploadDocs extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
 
-  Reports(this.onlineOfflineAppBar);
+  UploadDocs(this.onlineOfflineAppBar);
 
   @override
-  _ReportsState createState() => _ReportsState();
+  _UploadDocsState createState() => _UploadDocsState();
 }
 
-class _ReportsState extends State<Reports> {
+class _UploadDocsState extends State<UploadDocs> {
   @override
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
       Container(
-        child: Center(child: Text("Reports")),
+        child: Center(child: Text("Upload Documents")),
       ),
       null,
-      "Reports",
+      "Upload Documents",
       widget.onlineOfflineAppBar,
       null,
       null,
-      true,
+      false,
     );
   }
 }

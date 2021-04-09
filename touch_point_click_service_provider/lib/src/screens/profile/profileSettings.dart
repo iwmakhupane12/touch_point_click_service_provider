@@ -30,7 +30,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(context, displayBody(), null,
-        "Account Settings", widget.onlineOfflineAppBar, null, null);
+        "Account Settings", widget.onlineOfflineAppBar, null, null, false);
   }
 
   Widget buttonsToDisplay(String name, Icon icon) {

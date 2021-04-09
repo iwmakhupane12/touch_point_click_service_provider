@@ -78,11 +78,11 @@ class DashDrawer extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Company Name',
+                                'Touchpoint Click Pty(ltd)',
                                 style: AppTextStyles.normalBlack(normal, white),
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text('companyemail@gmiail.com',
+                              Text('info@tpclick.co.za',
                                   style: AppTextStyles.normalBlackSmall(
                                       normal, white),
                                   overflow: TextOverflow.ellipsis),

@@ -19,10 +19,10 @@ class _RequestInvoiceState extends State<RequestInvoice> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          headingText("Service Provider"),
-          serviceProvider(),
           headingText("Invoice Details"),
           invoiceDetails(),
+          headingText("Service Provider"),
+          serviceProvider(),
           headingText("Bill To"),
           billAddress(),
           headingText("Services"),

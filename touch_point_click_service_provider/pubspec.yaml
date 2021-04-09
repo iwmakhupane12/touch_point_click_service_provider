@@ -38,6 +38,10 @@ dependencies:
   time_range_picker: ^2.0.1
   configurable_expansion_tile: ^1.0.0
   images_picker: ^0.0.7
+  # Firebase
+  firebase_auth: ^1.0.2
+  cloud_firestore: ^1.0.4
+  firebase_storage: ^8.0.2
 
 dev_dependencies:
   flutter_test:

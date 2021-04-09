@@ -151,7 +151,7 @@ class _RequestTrackingState extends State<RequestTracking> {
                     )
                   ],
                   borderRadius: BorderRadius.circular(25)),
-              height: null,
+              height: 95,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -161,6 +161,9 @@ class _RequestTrackingState extends State<RequestTracking> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: AppTextStyles.normalBlack(normal, black)),
+                    timeLineList.elementAt(index).getID() == "0"
+                        ? SizedBox(height: 15.0)
+                        : Container(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

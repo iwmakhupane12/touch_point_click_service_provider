@@ -32,6 +32,7 @@ class _ScheduleState extends State<Schedule> {
         AppBarTabs.twoAppBarBottomTabs("To-Do-List", "Set Schedule"),
         "Schedule",
         widget.onlineOfflineAppBar,
+        true,
       ),
     );
   }
@@ -39,12 +40,12 @@ class _ScheduleState extends State<Schedule> {
   Widget screenBody() {
     return TabBarView(children: [
       Container(
+        child: Schedules(widget.onlineOfflineAppBar),
+      ),
+      Container(
         color: white,
         child: ToDoList(),
       ),
-      Container(
-        child: Schedules(widget.onlineOfflineAppBar),
-      )
     ]);
   }
 }

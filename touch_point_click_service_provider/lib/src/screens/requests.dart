@@ -46,6 +46,7 @@ class _RequestsState extends State<Requests> {
         widget.onlineOfflineAppBar,
         null,
         null,
+        true,
       ),
     );
   }
