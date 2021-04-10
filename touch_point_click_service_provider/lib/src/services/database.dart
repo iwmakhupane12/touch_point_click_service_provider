@@ -6,7 +6,7 @@ class Database {
   Database(this.uid);
 
   Future createUser(String name, String phone, String altPhone, String email,
-      String address, String regDate) {
+      String regDate) {
     dynamic txtToReturn;
 
     final firestoreInstance = FirebaseFirestore.instance;
@@ -20,7 +20,7 @@ class Database {
           'provider_phone': phone,
           'provider_alt_phone': altPhone,
           'provider_email': email,
-          'provider_address': address,
+          'provider_address': "-1",
           'provider_reg_date': regDate,
           'provider_last_seen': '-1',
           'provider_category': '-1',

@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:country_calling_code_picker/country.dart';
+import 'package:country_calling_code_picker/picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
@@ -8,6 +13,7 @@ import 'package:touch_point_click_service_provider/src/screens/profile.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
 import 'package:touch_point_click_service_provider/src/screens/services.dart';
+import 'package:touch_point_click_service_provider/src/screens/signInUp.dart';
 import 'package:touch_point_click_service_provider/src/screens/splashScreen.dart';
 
 class DashDrawer extends StatelessWidget {
@@ -36,6 +42,7 @@ class DashDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initCountry(context); //Coutry code when signing out
     return Drawer(
       child: ListView.builder(
         itemCount: 5,
@@ -45,6 +52,10 @@ class DashDrawer extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   Widget buttonsToDisplay(
@@ -113,6 +124,12 @@ class DashDrawer extends StatelessWidget {
     );
   }
 
+  Country _userCountry;
+
+  void initCountry(BuildContext context) async {
+    _userCountry = await getCountryByCountryCode(context, "ZA");
+  }
+
   void changeScreen(BuildContext context, String btnClicked) {
     Navigator.pushReplacement(
       context,
@@ -142,7 +159,8 @@ class DashDrawer extends StatelessWidget {
               break;
             case "Logout":
               {
-                return SplashScreen();
+                signOut();
+                return SignInUp(_userCountry);
               }
               break;
           }

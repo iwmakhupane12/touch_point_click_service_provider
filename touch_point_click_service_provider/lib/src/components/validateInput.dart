@@ -45,7 +45,7 @@ class ValidateInput {
   }
 
   static Widget errorText(String errorMessage) {
-    Padding(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
         errorMessage,

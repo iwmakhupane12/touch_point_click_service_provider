@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -7,6 +8,7 @@ import 'package:country_calling_code_picker/picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:touch_point_click_service_provider/src/components/loadingPopUp.dart';
+import 'package:touch_point_click_service_provider/src/screens/home.dart';
 
 import 'package:touch_point_click_service_provider/src/screens/signInUp.dart';
 
@@ -19,8 +21,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp();
     initCountry('ZA');
+  }
+
+  void initFirebaseApp() {
+    Firebase.initializeApp().whenComplete(() {
+      changeScreenAfterLoggingIn();
+    });
+  }
+
+  void changeScreenAfterLoggingIn() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      User authUser = FirebaseAuth.instance.currentUser;
+      print(authUser.uid);
+      changeScreen("home");
+    } else {
+      changeScreen("login");
+    }
   }
 
   Country _userCountry;
@@ -31,16 +48,20 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         _userCountry = country;
       });
-      Timer(Duration(seconds: 5), () => changeScreen());
+      Timer(Duration(seconds: 1), () => initFirebaseApp());
     }
   }
 
-  void changeScreen() {
+  void changeScreen(String screen) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => SignInUp(_userCountry),
-      ),
+      MaterialPageRoute(builder: (context) {
+        if (screen == "login") {
+          return SignInUp(_userCountry);
+        } else {
+          return Home();
+        }
+      }),
     );
   }
 
@@ -80,24 +101,6 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 new LoadingPopUp(loadingColor: Colors.white),
-                /*CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                ),*/
-                /*Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 8.0),
-                  child: Flex(direction: Axis.horizontal, children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        'We Bring Services At The Palm Of Your Hand',
-                        style: AppTextStyles.bodyNormalWhiteSmall(),
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
-                        textDirection: TextDirection.rtl,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ]),
-                ),*/
                 SizedBox(height: 20.0)
               ],
             ),

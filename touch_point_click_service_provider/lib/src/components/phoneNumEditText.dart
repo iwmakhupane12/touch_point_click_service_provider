@@ -2,9 +2,10 @@ import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter/material.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
+// ignore: must_be_immutable
 class PhoneNumEditText extends StatefulWidget {
   final TextEditingController controller;
-  final Country country;
+  Country country;
 
   PhoneNumEditText(this.controller, this.country);
 
@@ -56,17 +57,22 @@ class _PhoneNumEditTextState extends State<PhoneNumEditText> {
     if (country != null) {
       setState(() {
         _country = country;
+        widget.country = country;
       });
     }
   }
 
   Widget countryWithCode() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
-      child: Container(
-        width: null,
-        child: GestureDetector(
-          onTap: () => _showCountryPicker(),
+    return InkWell(
+      onTap: () => _showCountryPicker(),
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(30.0),
+        bottomLeft: Radius.circular(30.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 17.0, bottom: 17.0, left: 10.0),
+        child: Container(
+          width: null,
           child: Row(
             children: [
               Image.asset(

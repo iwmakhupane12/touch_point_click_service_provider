@@ -8,11 +8,14 @@ import 'package:country_calling_code_picker/country.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
+import 'package:touch_point_click_service_provider/src/components/dateTimeConvertFunctions.dart';
 import 'package:touch_point_click_service_provider/src/components/passwordTextEdit.dart';
 import 'package:touch_point_click_service_provider/src/components/phoneNumEditText.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/validateInput.dart';
+import 'package:touch_point_click_service_provider/src/models/serviceProvider.dart';
 import 'package:touch_point_click_service_provider/src/screens/home.dart';
+import 'package:touch_point_click_service_provider/src/services/userAuth.dart';
 
 class SignUp extends StatefulWidget {
   final Country country;
@@ -32,6 +35,7 @@ class _SignUpState extends State<SignUp> {
       _confirmPasswordController;
 
   Country _country;
+  UserAuth _userAuth = new UserAuth();
 
   PhoneNumEditText phoneNumEditText, altPhoneNumEditText;
 
@@ -94,7 +98,7 @@ class _SignUpState extends State<SignUp> {
             blnName
                 ? Container()
                 : ValidateInput.errorText(
-                    "Service Provider's Name ${ValidateInput.errorTextNull}"),
+                    "Service Provider's Name${ValidateInput.errorTextNull}"),
             headerText("Phone Number*"),
             Padding(
               padding: padding,
@@ -162,20 +166,14 @@ class _SignUpState extends State<SignUp> {
   }
 
   void changeToHome() {
-    UtilWidget.showLoadingDialog(context, "Signing Up...");
-    Timer(Duration(seconds: 2), () {
-      Navigator.pop(context);
+    Navigator.pop(context); //Pop loading dialog
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(),
-        ),
-      );
-      /*setState(() {
-        absorb = false;
-      });*/
-    });
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ),
+    );
   }
 
   bool blnName = true,
@@ -185,33 +183,43 @@ class _SignUpState extends State<SignUp> {
       blnConfirm = true;
 
   bool validateLogin() {
-    if (ValidateInput.validateText(_providerNameController.text)) {
+    bool valide = false;
+
+    if (!ValidateInput.validateText(_providerNameController.text)) {
       setState(() => blnName = false);
-      return false;
+    } else {
+      setState(() => blnName = true);
     }
 
-    if (ValidateInput.validateText(_phoneNumController.text)) {
+    if (!ValidateInput.validateText(_phoneNumController.text)) {
       setState(() => blnPhone = false);
-      return false;
+    } else {
+      setState(() => blnPhone = true);
     }
 
-    if (ValidateInput.validateEmail(_emailController.text)) {
+    if (!ValidateInput.validateEmail(_emailController.text)) {
       setState(() => blnEmail = false);
-      return false;
+    } else {
+      setState(() => blnEmail = true);
     }
 
-    if (ValidateInput.validatePasswordLength(_passwordController.text)) {
+    if (!ValidateInput.validatePasswordLength(_passwordController.text)) {
       setState(() => blnPassword = false);
-      return false;
+    } else {
+      setState(() => blnPassword = true);
     }
 
-    if (ValidateInput.validatePasswordMatch(
+    if (!ValidateInput.validatePasswordMatch(
         _passwordController.text, _confirmPasswordController.text)) {
       setState(() => blnConfirm = false);
-      return false;
+    } else {
+      setState(() => blnConfirm = true);
     }
 
-    return true;
+    if (blnName && blnPhone && blnEmail && blnPassword && blnConfirm)
+      valide = true;
+
+    return valide;
   }
 
   void setAbsorbState(bool state) {
@@ -220,16 +228,65 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
+  String name, phone, altPhone, email, password, regDate;
+
+  void setRegisterVars() {
+    name = _providerNameController.text.trim();
+    phone = replacePhoneZeroWithCode(
+        _phoneNumController.text.trim(), phoneNumEditText.country);
+
+    if (_altPhoneNumController.text != "") {
+      altPhone = replacePhoneZeroWithCode(
+          _altPhoneNumController.text.trim(), altPhoneNumEditText.country);
+    }
+
+    email = _emailController.text.trim().toLowerCase();
+    password = _passwordController.text.trim();
+    regDate = DateTimeConvert.dateFormated(DateTime.now()) +
+        " @ " +
+        DateTimeConvert.addZeroToTime(
+            "${TimeOfDay.now().hour}", "${TimeOfDay.now().minute}");
+  }
+
+  String replacePhoneZeroWithCode(String txtNumber, Country selectedCountry) {
+    if (txtNumber.startsWith('0')) {
+      return txtNumber.replaceFirst('0', selectedCountry.callingCode);
+    } else {
+      return txtNumber;
+    }
+  }
+
   Widget signUpButton() {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Container(
         height: 50,
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (validateLogin()) {
+              UtilWidget.showLoadingDialog(context, "Signing Up...");
               setAbsorbState(true);
-              changeToHome();
+              setRegisterVars();
+              dynamic result = await _userAuth.signUpEmailPassword(
+                  email, password, name, phone, altPhone, regDate);
+
+              if (result != null) {
+                if (result == 'weak-password') {
+                  print('The password provided is too weak.');
+                  Navigator.pop(context);
+                  setAbsorbState(false);
+                } else if (result == 'email-already-in-use') {
+                  print('The account already exists for that email.');
+                  Navigator.pop(context);
+                  setAbsorbState(false);
+                } else if (result == "unknown") {
+                  print('Unknown Error Occurred.');
+                  Navigator.pop(context);
+                  setAbsorbState(false);
+                } else if (result == "Success") {
+                  changeToHome();
+                }
+              }
             } else {
               setAbsorbState(false);
             }

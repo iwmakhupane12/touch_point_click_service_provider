@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
@@ -10,6 +11,7 @@ import 'package:touch_point_click_service_provider/src/components/utilWidget.dar
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
+import 'package:touch_point_click_service_provider/src/models/serviceProvider.dart';
 import 'package:touch_point_click_service_provider/src/models/setAndReturnModels.dart';
 import 'package:touch_point_click_service_provider/src/models/userRequest.dart';
 
@@ -22,8 +24,9 @@ import 'package:touch_point_click_service_provider/src/screens/reports.dart';
 
 class Home extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
+  final ServiceProvider serviceProvider;
 
-  Home({this.onlineOfflineAppBar});
+  Home({this.onlineOfflineAppBar, this.serviceProvider});
 
   @override
   _HomeState createState() => _HomeState();
@@ -34,6 +37,10 @@ OnlineOfflineAppBar onlineOfflineAppBar;
 class _HomeState extends State<Home> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
+  ServiceProvider _serviceProvider;
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   FontWeight bold = FontWeight.bold;
   FontWeight normal = FontWeight.normal;
   Color black = Colors.black;
@@ -41,15 +48,36 @@ class _HomeState extends State<Home> {
   final String currentRequests = "Current Request";
   final String pendingRequests = "Pending Request(s)";
 
-  @override
-  void initState() {
-    super.initState();
+  void initBottomBar() {
     if (widget.onlineOfflineAppBar == null) {
       onlineOfflineAppBar = OnlineOfflineAppBar();
     } else {
       onlineOfflineAppBar = widget.onlineOfflineAppBar;
     }
+  }
+
+  void initServiceProvider() {
+    if (widget.serviceProvider != null) {
+      _serviceProvider = widget.serviceProvider;
+    }
+  }
+
+  void checkLoggedInUser() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      User authUser = FirebaseAuth.instance.currentUser;
+      print(authUser.uid);
+    } else {
+      print("No Logged In User");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initBottomBar();
+    initServiceProvider();
     fillUserRequestList();
+    checkLoggedInUser();
   }
 
   @override
@@ -235,50 +263,49 @@ class _HomeState extends State<Home> {
         50,
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Flex(
-            direction: Axis.horizontal,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: AppColors.appBackgroundColor,
-                      radius: 40.0,
-                      child: new Icon(
-                        Icons.person,
-                        color: Colors.blue,
-                        size: 50,
-                      ),
-                    ),
-                    Spacer(flex: 1),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Company Name",
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.normalCompanyName(
-                                FontWeight.normal, Colors.black),
-                          ),
-                          Text(
-                            "3427 K Section, Botshabelo, 9781",
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.normalBlackSmall(
-                                FontWeight.normal, Colors.black),
-                          ),
-                          companyDetails("4.3", "200+", "10"),
-                          Text(
-                            "Open Drawer Menu",
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.normalBlackSmall(
-                                FontWeight.normal, AppColors.appBlueColor),
-                          ),
-                        ]),
-                    Spacer(flex: 2),
-                  ],
+              CircleAvatar(
+                backgroundColor: AppColors.appBackgroundColor,
+                radius: 40.0,
+                child: new Icon(
+                  Icons.person,
+                  color: Colors.blue,
+                  size: 50,
                 ),
               ),
+              SizedBox(width: 15.0),
+              Flexible(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Itumeleng Makhupane", //_serviceProvider.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.normalCompanyName(
+                            FontWeight.normal, Colors.black),
+                      ),
+                      Text(
+                        /*_serviceProvider.address == "N/A"
+                            ? "Address Not Set":*/
+                        "3427 K Section, Botshabelo, 9781", //_serviceProvider.address,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.normalBlackSmall(
+                            FontWeight.normal, Colors.black),
+                      ),
+                      companyDetails(
+                        "4.0", //"${_serviceProvider.totalRating}",
+                        "100", "",
+                      ), //"${_serviceProvider.numRated}", ""),
+                      Text(
+                        "Open Menu Drawer",
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.normalBlackSmall(
+                            FontWeight.normal, AppColors.appBlueColor),
+                      ),
+                    ]),
+              )
             ],
           ),
         ),

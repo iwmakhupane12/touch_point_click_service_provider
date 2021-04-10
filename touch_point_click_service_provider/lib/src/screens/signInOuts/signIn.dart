@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:country_calling_code_picker/country.dart';
@@ -14,6 +15,7 @@ import 'package:touch_point_click_service_provider/src/components/validateInput.
 import 'package:touch_point_click_service_provider/src/screens/home.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests/currentRequest.dart';
 import 'package:touch_point_click_service_provider/src/screens/signInOuts/forgotPassword.dart';
+import 'package:touch_point_click_service_provider/src/services/userAuth.dart';
 
 class SignIn extends StatefulWidget {
   final Country country;
@@ -27,6 +29,8 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   TextEditingController signInPasswordController, emailController;
   Country _country;
+
+  UserAuth userAuth = UserAuth();
 
   final FontWeight normal = FontWeight.normal;
   final FontWeight bold = FontWeight.bold;
@@ -81,6 +85,9 @@ class _SignInState extends State<SignIn> {
                   : Container(),
               forgotPassword(),
               signInButton(),
+              emptyTexts
+                  ? ValidateInput.errorText("Enter your Email and Password")
+                  : Container(),
             ],
           ),
         ),
@@ -88,7 +95,7 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  bool creditialsIncorrect = false;
+  bool creditialsIncorrect = false, emptyTexts = false;
 
   static const EdgeInsets padding = EdgeInsets.symmetric(horizontal: 10.0);
 
@@ -139,8 +146,7 @@ class _SignInState extends State<SignIn> {
   }
 
   void changeToHome() {
-    UtilWidget.showLoadingDialog(context, "Signing In...");
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 1), () {
       Navigator.pop(context);
 
       Navigator.pushReplacement(
@@ -155,17 +161,60 @@ class _SignInState extends State<SignIn> {
     });
   }
 
+  String password, email;
+
+  void initVars() {
+    if (signInPasswordController.text == "" || emailController.text == "") {
+      setState(() => emptyTexts = true);
+    } else {
+      setState(() => emptyTexts = false);
+      password = signInPasswordController.text.trim();
+      email = emailController.text.trim();
+    }
+  }
+
+  void setAbsorb(bool state) {
+    setState(() => absorb = state);
+  }
+
+  void setIncorrectCreds(bool state) {
+    setState(() => creditialsIncorrect = state);
+  }
+
   Widget signInButton() {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Container(
         height: 50,
         child: ElevatedButton(
-          onPressed: () {
-            setState(() {
-              absorb = true;
-            });
-            changeToHome();
+          onPressed: () async {
+            initVars();
+            if (!emptyTexts) {
+              setAbsorb(true);
+              UtilWidget.showLoadingDialog(context, "Signing In...");
+              dynamic result =
+                  await userAuth.signInEmailPassword(email, password);
+              if (result != null) {
+                if (result == 'user-not-found') {
+                  print('The user email does not exist.');
+                  Navigator.pop(context);
+                  setIncorrectCreds(false);
+                  setAbsorb(false);
+                } else if (result == 'wrong-password') {
+                  print('Incorrect password.');
+                  Navigator.pop(context);
+                  setIncorrectCreds(false);
+                  setAbsorb(false);
+                } else if (result == "Success") {
+                  changeToHome();
+                } else {
+                  print('Unknown Error');
+                  Navigator.pop(context);
+                  setIncorrectCreds(true);
+                  setAbsorb(false);
+                }
+              }
+            }
           },
           style: UtilWidget.buttonStyle,
           child: Text(

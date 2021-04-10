@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:country_calling_code_picker/country.dart';
 import 'package:country_calling_code_picker/picker.dart';
-import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 import 'package:touch_point_click_service_provider/src/components/appBarTabs.dart';
 import 'package:touch_point_click_service_provider/src/screens/signInOuts/signIn.dart';
 import 'package:touch_point_click_service_provider/src/screens/signInOuts/signUp.dart';
