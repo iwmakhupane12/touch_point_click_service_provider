@@ -38,11 +38,11 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     estTimeController = TextEditingController();
 
     if (userService != null) {
-      serviceController.text = userService.getServiceDesc();
-      categoryController.text = userService.getCategory();
-      priceController.text = userService.getPrice();
-      estTimeController.text = userService.getEstTime();
-      _radioValue = userService.getChargeType();
+      serviceController.text = userService.serviceDesc;
+      categoryController.text = userService.category;
+      priceController.text = userService.price;
+      estTimeController.text = userService.estTime;
+      _radioValue = userService.chargeType;
     }
   }
 

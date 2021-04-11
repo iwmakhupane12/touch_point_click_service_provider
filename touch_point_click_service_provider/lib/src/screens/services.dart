@@ -10,7 +10,6 @@ import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTex
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
-import 'package:touch_point_click_service_provider/src/models/setAndReturnModels.dart';
 import 'package:touch_point_click_service_provider/src/models/userService.dart';
 import 'package:touch_point_click_service_provider/src/screens/services/serviceDetails.dart';
 
@@ -39,9 +38,8 @@ class _ServicesState extends State<Services> {
     categoriesList.add("Any");
     for (int i = 0; i < userServiceList.length; i++) {
       //Checks if the category is already in the list and if not, add it
-      if (!categoriesList
-          .contains(userServiceList.elementAt(i).getCategory())) {
-        categoriesList.add(userServiceList.elementAt(i).getCategory());
+      if (!categoriesList.contains(userServiceList.elementAt(i).category)) {
+        categoriesList.add(userServiceList.elementAt(i).category);
         categoryBoolExpandedList.add(false); //Initialising
       }
     }
@@ -50,40 +48,33 @@ class _ServicesState extends State<Services> {
   void initScheduleListData() {
     //Category 1
     userServiceList.add(
-      SetAndReturnModels.userService(
-          "1", "Sciences", "Mathematics", "200", "60", "Per Hour"),
+      UserService("1", "Sciences", "Mathematics", "200", "60", "Per Hour"),
     );
     userServiceList.add(
-      SetAndReturnModels.userService(
+      UserService(
           "2", "Sciences", "Physical Sciences", "180", "60", "Per Hour"),
     );
     userServiceList.add(
-      SetAndReturnModels.userService(
-          "3", "Sciences", "Life Scieces", "150", "60", "Per Hour"),
+      UserService("3", "Sciences", "Life Scieces", "150", "60", "Per Hour"),
     );
     userServiceList.add(
-      SetAndReturnModels.userService(
-          "4", "Sciences", "Geography", "150", "60", "Per Hour"),
+      UserService("4", "Sciences", "Geography", "150", "60", "Per Hour"),
     );
 
     //Category 2
     userServiceList.add(
-      SetAndReturnModels.userService(
-          "5", "Commerce", "Accounting", "200", "60", "Per Hour"),
+      UserService("5", "Commerce", "Accounting", "200", "60", "Per Hour"),
     );
     userServiceList.add(
-      SetAndReturnModels.userService(
-          "6", "Commerce", "Business Studies", "150", "60", "Per Hour"),
+      UserService("6", "Commerce", "Business Studies", "150", "60", "Per Hour"),
     );
     userServiceList.add(
-      SetAndReturnModels.userService(
-          "7", "Commerce", "Economics", "150", "60", "Per Hour"),
+      UserService("7", "Commerce", "Economics", "150", "60", "Per Hour"),
     );
 
     //Category 3
     userServiceList.add(
-      SetAndReturnModels.userService(
-          "8", "Histories", "History", "150", "60", "Per Hour"),
+      UserService("8", "Histories", "History", "150", "60", "Per Hour"),
     );
   }
 
@@ -121,14 +112,14 @@ class _ServicesState extends State<Services> {
     for (int i = 0; i < categoriesList.length; i++) {
       List<Widget> tempServicesList = [];
       for (int j = 0; j < userServiceList.length; j++) {
-        if (userServiceList.elementAt(j).getCategory() ==
+        if (userServiceList.elementAt(j).category ==
             categoriesList.elementAt(i)) {
           tempServicesList.add(
             service(
               j,
-              userServiceList.elementAt(j).getServiceDesc(),
-              userServiceList.elementAt(j).getPrice(),
-              userServiceList.elementAt(j).getChargeType(),
+              userServiceList.elementAt(j).serviceDesc,
+              userServiceList.elementAt(j).price,
+              userServiceList.elementAt(j).chargeType,
             ),
           );
         }

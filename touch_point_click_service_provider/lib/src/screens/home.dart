@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/dashDrawer.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
-import 'package:touch_point_click_service_provider/src/components/dashRequests.dart';
 import 'package:touch_point_click_service_provider/src/components/requestComp.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
@@ -12,10 +11,8 @@ import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTex
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 import 'package:touch_point_click_service_provider/src/models/serviceProvider.dart';
-import 'package:touch_point_click_service_provider/src/models/setAndReturnModels.dart';
 import 'package:touch_point_click_service_provider/src/models/userRequest.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/profile.dart';
 import 'package:touch_point_click_service_provider/src/screens/profile/profileSettings.dart';
 import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
@@ -156,7 +153,7 @@ class _HomeState extends State<Home> {
   void fillUserRequestList() {
     for (int i = 0; i < 10; i++) {
       userRequestList.add(
-        SetAndReturnModels.userRequest("$i", "Itumeleng Makhupane",
+        UserRequest("$i", "Itumeleng Makhupane",
             "3427 K Section, Botshabelo, 9781", "18 Mar 2021", "16:10", "$i"),
       );
     }
