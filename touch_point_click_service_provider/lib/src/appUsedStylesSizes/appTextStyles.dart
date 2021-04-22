@@ -20,7 +20,8 @@ abstract class AppTextStyles {
     );
   }
 
-  static TextStyle normalCompanyName(FontWeight setFontWeight, Color normalBlackWhite) {
+  static TextStyle normalCompanyName(
+      FontWeight setFontWeight, Color normalBlackWhite) {
     return GoogleFonts.oswald(
       color: normalBlackWhite,
       fontWeight: setFontWeight,
@@ -117,6 +118,36 @@ abstract class AppTextStyles {
       color: Colors.black54,
       fontWeight: FontWeight.normal,
       fontSize: _normalSmallSmallFontSize,
+    );
+  }
+
+  static Widget normalText(
+      String text, FontWeight fontWeight, Color color, int lines) {
+    return Text(
+      text,
+      style: AppTextStyles.normalBlack(fontWeight, color),
+      overflow: TextOverflow.ellipsis,
+      maxLines: lines,
+    );
+  }
+
+  static Widget normalSmallText(
+      String text, FontWeight fontWeight, Color color, int lines) {
+    return Text(
+      text,
+      style: AppTextStyles.normalBlackSmall(fontWeight, color),
+      overflow: TextOverflow.ellipsis,
+      maxLines: lines,
+    );
+  }
+
+  static Widget normalSmallSmallText(
+      String text, FontWeight fontWeight, Color color, int lines) {
+    return Text(
+      text,
+      style: AppTextStyles.normalBlackSmallSmall(fontWeight, color),
+      overflow: TextOverflow.ellipsis,
+      maxLines: lines,
     );
   }
 }

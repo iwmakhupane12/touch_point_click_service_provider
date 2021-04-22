@@ -29,8 +29,23 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget.defaultScreen(context, displayBody(), null,
-        "Account Settings", widget.onlineOfflineAppBar, null, null, false);
+    return BaseWidget.defaultScreen(
+      context,
+      appBarBackButton(),
+      displayBody(),
+      null,
+      "Account Settings",
+      widget.onlineOfflineAppBar,
+      null,
+      null,
+    );
+  }
+
+  Widget appBarBackButton() {
+    return InkWell(
+      onTap: () => Navigator.pop(context),
+      child: AppIconsUsed.appBarIcon,
+    );
   }
 
   Widget buttonsToDisplay(String name, Icon icon) {
@@ -102,7 +117,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               break;
             case "About":
               {
-                return Services(widget.onlineOfflineAppBar);
+                return Schedule(widget.onlineOfflineAppBar);
               }
               break;
             case "Logout":

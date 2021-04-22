@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -6,23 +7,29 @@ import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appCol
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
+import 'package:touch_point_click_service_provider/src/components/appBarTabs.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/models/userService.dart';
+import 'package:touch_point_click_service_provider/src/screens/home.dart';
 import 'package:touch_point_click_service_provider/src/screens/services/serviceDetails.dart';
 
 class Services extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
+  final dynamic results;
+  final String success;
 
-  Services(this.onlineOfflineAppBar);
+  Services(this.onlineOfflineAppBar, this.results, this.success);
 
   @override
   _ServicesState createState() => _ServicesState();
 }
 
 class _ServicesState extends State<Services> {
+  String _uid;
+
   final FontWeight normal = FontWeight.normal;
   final FontWeight bold = FontWeight.bold;
 
@@ -35,7 +42,6 @@ class _ServicesState extends State<Services> {
   List<String> categoriesList = [];
 
   void initCategories() {
-    categoriesList.add("Any");
     for (int i = 0; i < userServiceList.length; i++) {
       //Checks if the category is already in the list and if not, add it
       if (!categoriesList.contains(userServiceList.elementAt(i).category)) {
@@ -45,57 +51,94 @@ class _ServicesState extends State<Services> {
     }
   }
 
-  void initScheduleListData() {
-    //Category 1
-    userServiceList.add(
-      UserService("1", "Sciences", "Mathematics", "200", "60", "Per Hour"),
-    );
-    userServiceList.add(
-      UserService(
-          "2", "Sciences", "Physical Sciences", "180", "60", "Per Hour"),
-    );
-    userServiceList.add(
-      UserService("3", "Sciences", "Life Scieces", "150", "60", "Per Hour"),
-    );
-    userServiceList.add(
-      UserService("4", "Sciences", "Geography", "150", "60", "Per Hour"),
-    );
+  bool gettingServices = true;
 
-    //Category 2
-    userServiceList.add(
-      UserService("5", "Commerce", "Accounting", "200", "60", "Per Hour"),
-    );
-    userServiceList.add(
-      UserService("6", "Commerce", "Business Studies", "150", "60", "Per Hour"),
-    );
-    userServiceList.add(
-      UserService("7", "Commerce", "Economics", "150", "60", "Per Hour"),
-    );
+  dynamic results;
+  String success;
 
-    //Category 3
-    userServiceList.add(
-      UserService("8", "Histories", "History", "150", "60", "Per Hour"),
-    );
+  void initServices() {
+    if (results != null) {
+      if (success == "Success") {
+        userServiceList = results;
+      } else if (results == "No Services") {
+        print("No Services");
+      } else {
+        print("Unknown Error");
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    initScheduleListData();
+    _uid = FirebaseAuth.instance.currentUser.uid; //Getting user Id
+    results = widget.results;
+    success = widget.success;
+    initServices();
     initCategories();
+    setActiveServices();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget.defaultScreen(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: DefaultTabController(
+          length: 2,
+          initialIndex: 0,
+          child: BaseWidget.defaultScreen(
+            context,
+            appBarBackButton(),
+            screenBody(),
+            AppBarTabs.twoAppBarBottomTabs("Active", "Deleted"),
+            "Services",
+            widget.onlineOfflineAppBar,
+            floatingActionButton(),
+            null,
+          )),
+    );
+  }
+
+  Future<bool> _onWillPop() {
+    backHome();
+    //return false;
+  }
+
+  Widget screenBody() {
+    return TabBarView(children: [
+      Container(
+        child: activeServices(),
+      ),
+      Container(
+        child: deletedServices(),
+      )
+    ]);
+  }
+
+  Widget activeServices() {
+    return activeList.length <= 0 ? viewText() : ListView(children: activeList);
+  }
+
+  Widget deletedServices() {
+    return deletedList.length <= 0
+        ? noDeletedServices()
+        : ListView(children: deletedList);
+  }
+
+  Widget appBarBackButton() {
+    return InkWell(
+      onTap: () => backHome(),
+      child: AppIconsUsed.appBarIcon,
+    );
+  }
+
+  void backHome() {
+    Navigator.pushReplacement(
       context,
-      getRequests(),
-      null,
-      "Services",
-      widget.onlineOfflineAppBar,
-      floatingActionButton(),
-      null,
-      true,
+      MaterialPageRoute(
+        builder: (context) =>
+            Home(onlineOfflineAppBar: widget.onlineOfflineAppBar),
+      ),
     );
   }
 
@@ -107,30 +150,48 @@ class _ServicesState extends State<Services> {
     );
   }
 
-  Widget getRequests() {
-    List<Widget> list = [];
+  List<Widget> activeList = [], deletedList = [];
+
+  void setActiveServices() {
     for (int i = 0; i < categoriesList.length; i++) {
-      List<Widget> tempServicesList = [];
+      List<Widget> tempServicesList = [], tempDeletedService = [];
       for (int j = 0; j < userServiceList.length; j++) {
         if (userServiceList.elementAt(j).category ==
             categoriesList.elementAt(i)) {
-          tempServicesList.add(
-            service(
-              j,
-              userServiceList.elementAt(j).serviceDesc,
-              userServiceList.elementAt(j).price,
-              userServiceList.elementAt(j).chargeType,
-            ),
-          );
+          if (!userServiceList.elementAt(j).deleted) {
+            //Active
+            tempServicesList.add(
+              service(
+                j,
+                userServiceList.elementAt(j).serviceDesc,
+                userServiceList.elementAt(j).price,
+                userServiceList.elementAt(j).chargeType,
+              ),
+            );
+          } else {
+            //Deleted
+            tempDeletedService.add(
+              service(
+                j,
+                userServiceList.elementAt(j).serviceDesc,
+                userServiceList.elementAt(j).price,
+                userServiceList.elementAt(j).chargeType,
+              ),
+            );
+          }
         }
       }
 
       //Dont display any category header that does not have any services
       if (tempServicesList.length > 0) {
-        list.add(display(categoriesList.elementAt(i), tempServicesList));
+        activeList.add(display(categoriesList.elementAt(i), tempServicesList));
+      }
+
+      if (tempDeletedService.length > 0) {
+        deletedList
+            .add(display(categoriesList.elementAt(i), tempDeletedService));
       }
     }
-    return new ListView(children: list);
   }
 
   Widget display(String categorName, List<Widget> tempUserServicesList) {
@@ -164,7 +225,7 @@ class _ServicesState extends State<Services> {
     );
   }
 
-  Widget service(int serviceListIndex, String serviceDesc, String price,
+  Widget service(int serviceListIndex, String serviceDesc, double price,
       String chargeType) {
     int index = serviceListIndex;
     return UtilWidget.baseCard(
@@ -179,7 +240,8 @@ class _ServicesState extends State<Services> {
             child: ListTile(
               title: Text(serviceDesc,
                   style: AppTextStyles.normalBlack(normal, black)),
-              subtitle: Text("R$price \u00B7 $chargeType",
+              subtitle: Text(
+                  "R${UtilWidget.addZeroToMoney(price.toString())} \u00B7 $chargeType",
                   style: AppTextStyles.normalGreyishSmall()),
               trailing: AppIconsUsed.iosForwardArrowRounded,
             ),
@@ -190,57 +252,95 @@ class _ServicesState extends State<Services> {
   }
 
   void changeScreen(int index, bool addService) {
-    Navigator.push(
+    UserService sendUserService = userServiceList.elementAt(index);
+    List<String> sendCategory = categoriesList;
+    activeList = null;
+    deletedList = null;
+    userServiceList = null;
+    categoriesList = null;
+
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => !addService
             ? ServiceDetails(
                 onlineOfflineAppBar: widget.onlineOfflineAppBar,
-                userService: userServiceList.elementAt(index),
-                categories: categoriesList,
+                userService: sendUserService,
+                categories: sendCategory,
+                uid: _uid,
               )
             : ServiceDetails(
                 onlineOfflineAppBar: widget.onlineOfflineAppBar,
-                categories: categoriesList,
+                categories: sendCategory,
+                uid: _uid,
               ),
       ),
     );
   }
 
   Widget viewText() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.black,
+    return ListView(children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(text: "You have no services.\n\n"),
+                  TextSpan(
+                      text: "Click here ",
+                      style: TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          //changeScreen(0, true);
+                          dynamic time = await UtilWidget.internetDateTime();
+                          if (time != null) {
+                            print(UtilWidget.internetDateTime());
+                          }
+                        }),
+                  TextSpan(
+                      text: "to add a service OR the round button below.\n\n"),
+                  TextSpan(
+                      text:
+                          'Add Service in order for clients to request your services',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                      ))
+                ],
               ),
-              children: [
-                TextSpan(text: "You have no services.\n\n"),
-                TextSpan(
-                    text: "Click here ",
-                    style: TextStyle(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        //changeScreen(false);
-                      }),
-                TextSpan(
-                    text: "to add a service OR the round button below.\n\n"),
-                TextSpan(
-                    text:
-                        'Add Service in order for clients to request your services',
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                    ))
-              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
+    ]);
+  }
+
+  Widget noDeletedServices() {
+    return ListView(children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(text: "You have no deleted services."),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ]);
   }
 }

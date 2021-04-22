@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +7,7 @@ import 'package:touch_point_click_service_provider/src/components/baseWidget.dar
 import 'package:touch_point_click_service_provider/src/components/dashDrawer.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/requestComp.dart';
+import 'package:touch_point_click_service_provider/src/components/returnQueries.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
@@ -18,6 +21,7 @@ import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests.dart';
 import 'package:touch_point_click_service_provider/src/screens/reports.dart';
+import 'package:touch_point_click_service_provider/src/services/database.dart';
 
 class Home extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -59,10 +63,11 @@ class _HomeState extends State<Home> {
     }
   }
 
+  String _uid;
+
   void checkLoggedInUser() {
     if (FirebaseAuth.instance.currentUser != null) {
-      User authUser = FirebaseAuth.instance.currentUser;
-      print(authUser.uid);
+      _uid = FirebaseAuth.instance.currentUser.uid;
     } else {
       print("No Logged In User");
     }
@@ -79,55 +84,72 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0.0,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
-        title: Text(
-          "Dashboard",
-          style: AppTextStyles.normalLarge(bold, black),
-        ),
-        actions: [
-          messageNotif(),
-          generalNotif(),
-        ],
-      ),
-      body: BaseWidget.clipedBase(
-        ListView(
-          children: [
-            Container(height: 150, child: homeProfile()),
-            UtilWidget.baseCard(
-                50, lunchBtn()), //Check if user is online, if yes, display
-            dashGrid(),
-            UtilWidget.stickyHeader(
-              currentRequests,
-              RequestComp(userRequestList.elementAt(1), onlineOfflineAppBar)
-                  .request(context),
-            ),
-            UtilWidget.stickyHeader(
-              pendingRequests,
-              getPendingRequests(),
-            ),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          title: Text(
+            "Dashboard",
+            style: AppTextStyles.normalLarge(bold, black),
+          ),
+          actions: [
+            messageNotif(),
+            generalNotif(),
           ],
         ),
+        body: BaseWidget.clipedBase(
+          ListView(
+            children: [
+              Container(height: 150, child: homeProfile()),
+              UtilWidget.baseCard(
+                  50, lunchBtn()), //Check if user is online, if yes, display
+              dashGrid(),
+              UtilWidget.stickyHeader(
+                currentRequests,
+                RequestComp(userRequestList.elementAt(1), onlineOfflineAppBar)
+                    .request(context),
+              ),
+              UtilWidget.stickyHeader(
+                pendingRequests,
+                getPendingRequests(),
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: onlineOfflineAppBar,
+        drawer: DashDrawer(onlineOfflineAppBar),
       ),
-      bottomNavigationBar: onlineOfflineAppBar,
-      drawer: DashDrawer(onlineOfflineAppBar),
     );
   }
 
-/*
-  Widget currentPendingHeadings() {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (BuildContext context, int i) {
-        return RequestComp.request();
-      },
-    );
-  }*/
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: AppTextStyles.normalText("Exit Application", bold, black, 1),
+            content: AppTextStyles.normalSmallText(
+                "Are you sure you want to exit?", normal, black, 1),
+            actions: <Widget>[
+              new TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child:
+                    AppTextStyles.normalSmallText("No", normal, Colors.blue, 1),
+              ),
+              new TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: AppTextStyles.normalSmallText(
+                    "Yes", normal, Colors.blue, 1),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
 
   Widget dashGrid() {
     return Column(
@@ -168,42 +190,57 @@ class _HomeState extends State<Home> {
     return new Column(children: list);
   }
 
-  void navToScreen(String dashTabs) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        // ignore: missing_return
-        builder: (context) {
-          switch (dashTabs) {
-            case "profile":
-              {
-                return ProfileSettings(onlineOfflineAppBar);
+  Future<void> navToScreen(String dashTabs) async {
+    switch (dashTabs) {
+      case "profile":
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfileSettings(onlineOfflineAppBar)));
+        }
+        break;
+      case "requests":
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Requests(onlineOfflineAppBar)));
+        }
+        break;
+      case "schedule":
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Schedule(onlineOfflineAppBar)));
+        }
+        break;
+      case "services":
+        {
+          UtilWidget.showLoadingDialog(context, "Getting Services");
+          Database database = Database(_uid);
+          dynamic results = await database.fetchServices();
+          Timer(Duration(seconds: 1), () {
+            if (results != null) {
+              if (results != "Unknown Error") {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Services(onlineOfflineAppBar,
+                            results, database.queryResults)));
+              } else {
+                //Show snackbar of an error
               }
-              break;
-            case "requests":
-              {
-                return Requests(onlineOfflineAppBar);
-              }
-              break;
-            case "schedule":
-              {
-                return Schedule(onlineOfflineAppBar);
-              }
-              break;
-            case "services":
-              {
-                return Services(onlineOfflineAppBar);
-              }
-              break;
-            case "reports":
-              {
-                return Reports(onlineOfflineAppBar);
-              }
-              break;
-          }
-        },
-      ),
-    );
+            }
+          });
+        }
+        break;
+      case "reports":
+        {}
+        break;
+      default:
+    }
   }
 
   double deviceWidth, deviceHeight;

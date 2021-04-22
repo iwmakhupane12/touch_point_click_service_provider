@@ -54,4 +54,20 @@ class ValidateInput {
       ),
     );
   }
+
+  //validate number
+  static bool isNumeric(String str) {
+    if (str == "") {
+      return false;
+    }
+    return int.tryParse(str) != null;
+  }
+
+  //Validate double
+  static bool isDouble(String str) {
+    if (str == "") {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
 }

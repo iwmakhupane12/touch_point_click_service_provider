@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 
 import 'package:touch_point_click_service_provider/src/components/appBarTabs.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
@@ -36,14 +37,21 @@ class _PastRequestState extends State<PastRequest> {
       initialIndex: 0,
       child: BaseWidget.defaultScreen(
         context,
+        appBarBackButton(),
         screenBody(),
         AppBarTabs.threeAppBarBottomTabs("Tracking", "Reciept", "Details"),
         "Past Request",
         widget.onlineOfflineAppBar,
         null,
         listActions,
-        false,
       ),
+    );
+  }
+
+  Widget appBarBackButton() {
+    return InkWell(
+      onTap: () => Navigator.pop(context),
+      child: AppIconsUsed.appBarIcon,
     );
   }
 
@@ -93,12 +101,12 @@ class _PastRequestState extends State<PastRequest> {
             break;
           case sendInvoice:
             {
-              print(sendInvoice);
+              print(sendInvoice); //Loading for Sending Invoice
             }
             break;
           case getInvoice:
             {
-              print(getInvoice);
+              print(getInvoice); //Loading for Sending Invoice
             }
             break;
           default:
