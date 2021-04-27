@@ -54,15 +54,17 @@ class _SchedulesState extends State<Schedules> {
   }
 
   void dummyData() {
-    userSchedule.setID("1");
-    userSchedule.setStartDate("09 Mar 2021");
-    userSchedule.setEndDate("15 Mar 2021");
-    userSchedule.setStartTime("08:00");
-    userSchedule.setEndTime("16:00");
+    userSchedule.docID = "1";
+    userSchedule.startDate = "09 Mar 2021";
+    userSchedule.endDate = "15 Mar 2021";
+    userSchedule.startTime = "08:00";
+    userSchedule.endTime = "16:00";
+    userSchedule.autoAccept = true;
+    userSchedule.autoOnline = false;
   }
 
   void changeScreen(bool edit) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => !edit

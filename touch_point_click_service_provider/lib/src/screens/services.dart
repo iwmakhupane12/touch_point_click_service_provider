@@ -31,6 +31,7 @@ class Services extends StatefulWidget {
 }
 
 class _ServicesState extends State<Services> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _uid;
 
   final FontWeight normal = FontWeight.normal;
@@ -89,6 +90,7 @@ class _ServicesState extends State<Services> {
         initialIndex: 0,
         child: BaseWidget.defaultScreen(
           context,
+          _scaffoldKey,
           screenBody(),
           AppBarTabs.twoAppBarBottomTabs("Active", "Deleted"),
           "Services",

@@ -21,6 +21,7 @@ class PastRequest extends StatefulWidget {
 }
 
 class _PastRequestState extends State<PastRequest> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<PopupMenuItem<String>> _dropDownMenuItems;
 
   @override
@@ -37,6 +38,7 @@ class _PastRequestState extends State<PastRequest> {
       initialIndex: 0,
       child: BaseWidget.defaultScreen(
         context,
+        _scaffoldKey,
         screenBody(),
         AppBarTabs.threeAppBarBottomTabs("Tracking", "Reciept", "Details"),
         "Past Request",

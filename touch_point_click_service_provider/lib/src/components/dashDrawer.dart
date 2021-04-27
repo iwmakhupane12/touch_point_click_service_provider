@@ -12,9 +12,7 @@ import 'package:touch_point_click_service_provider/src/components/onlineOfflineA
 import 'package:touch_point_click_service_provider/src/screens/profile.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
-import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/screens/signInUp.dart';
-import 'package:touch_point_click_service_provider/src/screens/splashScreen.dart';
 
 class DashDrawer extends StatelessWidget {
   final FontWeight normal = FontWeight.normal;

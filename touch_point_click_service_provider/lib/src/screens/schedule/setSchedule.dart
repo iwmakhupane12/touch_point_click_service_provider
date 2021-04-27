@@ -24,6 +24,8 @@ class SetSchedule extends StatefulWidget {
 }
 
 class _SetScheduleState extends State<SetSchedule> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final FontWeight normal = FontWeight.normal;
   final FontWeight bold = FontWeight.bold;
   final Color black = Colors.black;
@@ -45,6 +47,7 @@ class _SetScheduleState extends State<SetSchedule> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       ListView(
         children: [
           isDate ? setDate() : setTime(),
@@ -302,24 +305,24 @@ class _SetScheduleState extends State<SetSchedule> {
 
   void setDateState(String dateStart, String dateEnd) {
     if (widget.userSchedule != null) {
-      userSchedule.setStartDate(dateStart);
-      userSchedule.setEndDate(dateEnd);
+      userSchedule.startDate = dateStart;
+      userSchedule.endDate = dateEnd;
     } else {
       userSchedule = UserSchedule();
-      userSchedule.setStartDate(dateStart);
-      userSchedule.setEndDate(dateEnd);
+      userSchedule.startDate = dateStart;
+      userSchedule.endDate = dateEnd;
     }
   }
 
   void setTimeState(String timeStart, String timeEnd) {
     setState(() {
       if (widget.userSchedule != null) {
-        userSchedule.setStartTime(timeStart);
-        userSchedule.setEndTime(timeEnd);
+        userSchedule.startTime = timeStart;
+        userSchedule.endTime = timeEnd;
       } else {
         userSchedule = UserSchedule();
-        userSchedule.setStartTime(timeStart);
-        userSchedule.setEndTime(timeEnd);
+        userSchedule.startTime = timeStart;
+        userSchedule.endTime = timeEnd;
       }
     });
   }

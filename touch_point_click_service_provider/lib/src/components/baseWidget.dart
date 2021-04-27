@@ -7,8 +7,6 @@ import 'package:touch_point_click_service_provider/src/components/utilWidget.dar
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 
-import 'package:touch_point_click_service_provider/src/screens/home.dart';
-
 class BaseWidget {
   static Widget clipedBase(Widget display) {
     return UtilWidget.clipRectForApp(
@@ -29,6 +27,7 @@ class BaseWidget {
 
   static Widget defaultScreen(
     BuildContext context,
+    Key scaffoldKey,
     Widget displayBody,
     Widget bottomWidget,
     String appBarTitle,
@@ -37,6 +36,7 @@ class BaseWidget {
     List<Widget> actions,
   ) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -69,22 +69,7 @@ class BaseWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
-        leading: InkWell(
-          onTap: () => toHome
-              ? Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        Home(onlineOfflineAppBar: onlineOfflineAppBar),
-                  ),
-                )
-              : Navigator.pop(context),
-          child: Icon(
-            Icons.arrow_back_ios_rounded,
-            color: Colors.black,
-            size: 24,
-          ),
-        ),
+        leading: appBarBackButton(context),
         title: Text(
           appBarTitle,
           style: AppTextStyles.normalBlack(FontWeight.normal, Colors.black),

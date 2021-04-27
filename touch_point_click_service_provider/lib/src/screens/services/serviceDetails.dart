@@ -32,6 +32,7 @@ class ServiceDetails extends StatefulWidget {
 }
 
 class _ServiceDetailsState extends State<ServiceDetails> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   UserService userService;
   List<String> categories = [];
   List<DropdownMenuItem<String>> _dropDownCategoryItems;
@@ -76,7 +77,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         categories.insert(0, "Our Services");
       }
       initDropDown();
-      actions = ["Update", deleteService];
+      actions = userService.deleted ? ["Restore"] : ["Update", deleteService];
     } else {
       appBarTitle = "Add Service";
       _radioValue = firstValue;
@@ -87,13 +88,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
     initDropDownBtn();
 
-    if (userService != null) {
-      userService.deleted
-          ? listActions.add(restoreButton())
-          : listActions.add(menuButton());
-    } else {
-      listActions.add(menuButton());
-    }
+    listActions.add(menuButton());
 
     initControllers();
   }
@@ -111,6 +106,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       display(),
       null,
       appBarTitle,
@@ -237,14 +233,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     return validate;
   }
 
-  void viewValue() {
-    print("Service: $offeredService");
-    print("Display Category: $displayCategory");
-    print("Price: $price");
-    print("Charge Type: $chargeType");
-    print("Estimated Time: $estTime");
-  }
-
   String firstValue = "For Entire Service";
   String secondValue = "Per Hour";
 
@@ -359,47 +347,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     });
   }
 
-  void changeScreen(bool deleteService) async {
-    results = null;
-    if (!deleteService)
-      UtilWidget.showLoadingDialog(context, "Getting Services");
-    //Pop loading dialog
-    Database database = Database(_uid);
-    results = await database.fetchServices();
-    if (results != null) {
-      if (database.queryResults == "Success") {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Services(
-                  widget.onlineOfflineAppBar, results, database.queryResults),
-            ));
-      } else if (results == "No Services") {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Services(
-                  widget.onlineOfflineAppBar, results, database.queryResults),
-            ));
-        print("No Services");
-      }
-    }
-  }
-
-  Widget restoreButton() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: TextButton(
-        onPressed: () {
-          restoreBtn();
-        },
-        child: Text("Restore",
-            style: AppTextStyles.normalBlack(normal, black),
-            overflow: TextOverflow.ellipsis),
-      ),
-    );
-  }
-
   List<PopupMenuItem<String>> _dropDownMenuItems;
   static const String saveService = "Save";
   static const String deleteService = 'Delete';
@@ -411,7 +358,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         .map(
           (String value) => PopupMenuItem<String>(
             value: value,
-            child: Text(value),
+            child: AppTextStyles.normalText(value, normal, black, 1),
           ),
         )
         .toList();
@@ -436,6 +383,11 @@ class _ServiceDetailsState extends State<ServiceDetails> {
             case "Update":
               {
                 updateBtn();
+              }
+              break;
+            case "Restore":
+              {
+                restoreBtn();
               }
               break;
           }

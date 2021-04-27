@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ import 'package:touch_point_click_service_provider/src/components/passwordTextEd
 import 'package:touch_point_click_service_provider/src/components/phoneNumEditText.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/validateInput.dart';
-import 'package:touch_point_click_service_provider/src/models/serviceProvider.dart';
 import 'package:touch_point_click_service_provider/src/screens/home.dart';
 import 'package:touch_point_click_service_provider/src/services/userAuth.dart';
 
