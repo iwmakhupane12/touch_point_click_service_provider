@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 
@@ -24,7 +25,6 @@ class _UploadDocsState extends State<UploadDocs> {
       widget.onlineOfflineAppBar,
       null,
       null,
-      false,
     );
   }
 }

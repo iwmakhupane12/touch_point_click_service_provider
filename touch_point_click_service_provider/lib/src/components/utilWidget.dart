@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ntp/ntp.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -14,6 +15,33 @@ class UtilWidget {
       ),
       child: bodyContainer,
     );
+  }
+
+  static Future internetDateTime() async {
+    dynamic startDate = await NTP.now();
+    return startDate;
+  }
+
+  static void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        content: Text(
+          "$message",
+          style: AppTextStyles.normalBlack(FontWeight.normal, Colors.white),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+
+  static String addZeroToMoney(String money) {
+    List<String> price = money.split(".");
+    if (price.elementAt(1).length == 1) {
+      return money + "0";
+    }
+    return money;
   }
 
   static Widget baseCard(double height, Widget displayWidget) {

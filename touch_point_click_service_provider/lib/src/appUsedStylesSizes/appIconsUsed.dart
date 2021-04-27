@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppIconsUsed {
+  static Icon appBarIcon =Icon(
+        Icons.arrow_back_ios_rounded,
+        color: Colors.black,
+        size: 24,
+      );
+      
   static Icon emailIcon = Icon(
     Icons.alternate_email_outlined,
     color: Colors.black,

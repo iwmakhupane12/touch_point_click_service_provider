@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void changeScreen(String screen) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
         if (screen == "login") {

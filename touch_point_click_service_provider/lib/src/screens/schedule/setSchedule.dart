@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:time_range_picker/time_range_picker.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/dateTimeConvertFunctions.dart';
@@ -55,7 +56,6 @@ class _SetScheduleState extends State<SetSchedule> {
       widget.onlineOfflineAppBar,
       null,
       null,
-      false,
     );
   }
 

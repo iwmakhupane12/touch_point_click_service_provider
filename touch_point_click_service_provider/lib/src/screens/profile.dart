@@ -7,6 +7,7 @@ import 'package:touch_point_click_service_provider/src/components/baseWidget.dar
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/profileImage.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
+import 'package:touch_point_click_service_provider/src/screens/home.dart';
 
 class Profile extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -71,9 +72,21 @@ class _ProfileState extends State<Profile> {
       widget.onlineOfflineAppBar,
       null,
       actions,
-      true,
     );
   }
+
+  /*Widget appBarBackButton() {
+    return InkWell(
+      onTap: () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              Home(onlineOfflineAppBar: widget.onlineOfflineAppBar),
+        ),
+      ),
+      child: AppIconsUsed.appBarIcon,
+    );
+  }*/
 
   List<Widget> actions = [];
 
