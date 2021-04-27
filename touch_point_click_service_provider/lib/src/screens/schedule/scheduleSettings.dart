@@ -50,20 +50,12 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      appBarBackButton(),
       display(),
       null,
       "Schedule Settings",
       widget.onlineOfflineAppBar,
       null,
       null,
-    );
-  }
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: AppIconsUsed.appBarIcon,
     );
   }
 

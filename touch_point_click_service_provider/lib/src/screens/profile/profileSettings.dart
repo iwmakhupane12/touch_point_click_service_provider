@@ -31,20 +31,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      appBarBackButton(),
       displayBody(),
       null,
       "Account Settings",
       widget.onlineOfflineAppBar,
       null,
       null,
-    );
-  }
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: AppIconsUsed.appBarIcon,
     );
   }
 

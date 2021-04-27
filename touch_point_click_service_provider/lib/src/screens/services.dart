@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ import 'package:touch_point_click_service_provider/src/components/utilWidget.dar
 import 'package:touch_point_click_service_provider/src/models/userService.dart';
 import 'package:touch_point_click_service_provider/src/screens/home.dart';
 import 'package:touch_point_click_service_provider/src/screens/services/serviceDetails.dart';
+import 'package:touch_point_click_service_provider/src/services/database.dart';
 
 class Services extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -81,27 +84,44 @@ class _ServicesState extends State<Services> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: DefaultTabController(
-          length: 2,
-          initialIndex: 0,
-          child: BaseWidget.defaultScreen(
-            context,
-            appBarBackButton(),
-            screenBody(),
-            AppBarTabs.twoAppBarBottomTabs("Active", "Deleted"),
-            "Services",
-            widget.onlineOfflineAppBar,
-            floatingActionButton(),
-            null,
-          )),
-    );
+    return DefaultTabController(
+        length: 2,
+        initialIndex: 0,
+        child: BaseWidget.defaultScreen(
+          context,
+          screenBody(),
+          AppBarTabs.twoAppBarBottomTabs("Active", "Deleted"),
+          "Services",
+          widget.onlineOfflineAppBar,
+          floatingActionButton(),
+          null,
+        ));
   }
 
-  Future<bool> _onWillPop() {
-    backHome();
-    //return false;
+  FutureOr _onGoBack(dynamic value) async {
+    //UtilWidget.showLoadingDialog(context, "Getting Services");
+    Database database = Database(_uid);
+    dynamic backResults = await database.fetchServices();
+    Timer(Duration(milliseconds: 500), () {
+      if (backResults != null) {
+        if (backResults != "Unknown Error") {
+          setState(() {
+            results = backResults;
+            success = database.queryResults;
+            activeList = [];
+            deletedList = [];
+            userServiceList = [];
+            categoriesList = [];
+            initServices();
+            initCategories();
+            setActiveServices();
+          });
+        } else {
+          //Show snackbar of an error loading services, check internet connection
+        }
+      }
+    });
+    //Navigator.pop(context); //Remove loading dialog
   }
 
   Widget screenBody() {
@@ -123,23 +143,6 @@ class _ServicesState extends State<Services> {
     return deletedList.length <= 0
         ? noDeletedServices()
         : ListView(children: deletedList);
-  }
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => backHome(),
-      child: AppIconsUsed.appBarIcon,
-    );
-  }
-
-  void backHome() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            Home(onlineOfflineAppBar: widget.onlineOfflineAppBar),
-      ),
-    );
   }
 
   Widget floatingActionButton() {
@@ -254,12 +257,8 @@ class _ServicesState extends State<Services> {
   void changeScreen(int index, bool addService) {
     UserService sendUserService = userServiceList.elementAt(index);
     List<String> sendCategory = categoriesList;
-    activeList = null;
-    deletedList = null;
-    userServiceList = null;
-    categoriesList = null;
 
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => !addService
@@ -268,14 +267,16 @@ class _ServicesState extends State<Services> {
                 userService: sendUserService,
                 categories: sendCategory,
                 uid: _uid,
+                newService: false,
               )
             : ServiceDetails(
                 onlineOfflineAppBar: widget.onlineOfflineAppBar,
                 categories: sendCategory,
                 uid: _uid,
+                newService: true,
               ),
       ),
-    );
+    ).then(_onGoBack);
   }
 
   Widget viewText() {

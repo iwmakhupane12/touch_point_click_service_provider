@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
     switch (dashTabs) {
       case "profile":
         {
-          Navigator.pushReplacement(
+          Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ProfileSettings(onlineOfflineAppBar)));
@@ -202,7 +202,7 @@ class _HomeState extends State<Home> {
         break;
       case "requests":
         {
-          Navigator.pushReplacement(
+          Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => Requests(onlineOfflineAppBar)));
@@ -210,7 +210,7 @@ class _HomeState extends State<Home> {
         break;
       case "schedule":
         {
-          Navigator.pushReplacement(
+          Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => Schedule(onlineOfflineAppBar)));
@@ -221,10 +221,11 @@ class _HomeState extends State<Home> {
           UtilWidget.showLoadingDialog(context, "Getting Services");
           Database database = Database(_uid);
           dynamic results = await database.fetchServices();
-          Timer(Duration(seconds: 1), () {
+          Timer(Duration(milliseconds: 500), () {
             if (results != null) {
               if (results != "Unknown Error") {
-                Navigator.pushReplacement(
+                Navigator.pop(context);
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Services(onlineOfflineAppBar,

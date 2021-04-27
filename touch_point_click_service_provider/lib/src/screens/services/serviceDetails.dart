@@ -14,6 +14,7 @@ import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/services/database.dart';
 
 class ServiceDetails extends StatefulWidget {
+  final bool newService;
   final OnlineOfflineAppBar onlineOfflineAppBar;
   final UserService userService;
   final List<String> categories;
@@ -21,6 +22,7 @@ class ServiceDetails extends StatefulWidget {
 
   ServiceDetails(
       {@required this.onlineOfflineAppBar,
+      @required this.newService,
       this.userService,
       this.categories,
       @required this.uid});
@@ -59,25 +61,25 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     }
   }
 
+  bool newService = false;
+
   @override
   void initState() {
     super.initState();
     _uid = widget.uid;
-    if (widget.userService != null) {
-      userService = widget.userService;
-    } else {
-      appBarTitle = "Add Service";
-      _radioValue = firstValue;
-    }
+    newService = widget.newService;
 
-    if (widget.categories != null) {
+    if (!newService) {
+      userService = widget.userService;
       categories = widget.categories;
       if (!categories.contains('Our Services')) {
         categories.insert(0, "Our Services");
       }
       initDropDown();
-      actions = [userService != null ? "Update" : "Save", deleteService];
+      actions = ["Update", deleteService];
     } else {
+      appBarTitle = "Add Service";
+      _radioValue = firstValue;
       categories.add("Our Services");
       initDropDown();
       actions = [saveService];
@@ -107,23 +109,15 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: _onWillPop,
-        child: BaseWidget.defaultScreen(
-          context,
-          appBarBackButton(),
-          display(),
-          null,
-          appBarTitle,
-          widget.onlineOfflineAppBar,
-          null,
-          listActions,
-        ));
-  }
-
-  Future<bool> _onWillPop() {
-    changeScreen(false);
-    //return false;
+    return BaseWidget.defaultScreen(
+      context,
+      display(),
+      null,
+      appBarTitle,
+      widget.onlineOfflineAppBar,
+      null,
+      listActions,
+    );
   }
 
   final FontWeight normal = FontWeight.normal;
@@ -132,13 +126,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   final Color white = Colors.white;
 
   dynamic results;
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => changeScreen(false),
-      child: AppIconsUsed.appBarIcon,
-    );
-  }
 
   Widget display() {
     return AbsorbPointer(
@@ -531,7 +518,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     if (result != null) {
       if (result == "Service Deleted") {
         UtilWidget.showSnackBar(context, "Service Deleted");
-        Timer(Duration(seconds: 1), () => changeScreen(true));
+        Navigator.pop(context); //Remove loading dialog
+        Timer(Duration(milliseconds: 500), () => Navigator.pop(context));
       } else {
         print("Unknown Error");
         Navigator.pop(context);
@@ -550,7 +538,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     if (result != null) {
       if (result == "Service Restored") {
         UtilWidget.showSnackBar(context, "Service Restored");
-        Timer(Duration(seconds: 1), () => changeScreen(true));
+        Navigator.pop(context);
+        Timer(Duration(milliseconds: 500), () => Navigator.pop(context));
       } else {
         print("Unknown Error");
         Navigator.pop(context);

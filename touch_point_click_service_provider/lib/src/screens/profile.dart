@@ -66,7 +66,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      appBarBackButton(),
       displayBody(),
       null,
       "Profile",
@@ -76,7 +75,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget appBarBackButton() {
+  /*Widget appBarBackButton() {
     return InkWell(
       onTap: () => Navigator.pushReplacement(
         context,
@@ -87,7 +86,7 @@ class _ProfileState extends State<Profile> {
       ),
       child: AppIconsUsed.appBarIcon,
     );
-  }
+  }*/
 
   List<Widget> actions = [];
 

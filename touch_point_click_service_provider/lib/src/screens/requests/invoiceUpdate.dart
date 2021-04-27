@@ -42,20 +42,12 @@ class _InvoiceUpdateState extends State<InvoiceUpdate> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      appBarBackButton(),
       screenBody(),
       null,
       "Client Invoice",
       widget.onlineOfflineAppBar,
       null,
       null,
-    );
-  }
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: AppIconsUsed.appBarIcon,
     );
   }
 

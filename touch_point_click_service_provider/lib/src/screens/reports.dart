@@ -19,7 +19,6 @@ class _ReportsState extends State<Reports> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      appBarBackButton(),
       Container(
         child: Center(child: Text("Reports")),
       ),
@@ -31,7 +30,7 @@ class _ReportsState extends State<Reports> {
     );
   }
 
-  Widget appBarBackButton() {
+  /*Widget appBarBackButton() {
     return InkWell(
       onTap: () => Navigator.pushReplacement(
         context,
@@ -42,5 +41,5 @@ class _ReportsState extends State<Reports> {
       ),
       child: AppIconsUsed.appBarIcon,
     );
-  }
+  }*/
 }

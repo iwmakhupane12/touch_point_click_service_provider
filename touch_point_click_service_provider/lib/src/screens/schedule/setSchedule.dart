@@ -45,7 +45,6 @@ class _SetScheduleState extends State<SetSchedule> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      appBarBackButton(),
       ListView(
         children: [
           isDate ? setDate() : setTime(),
@@ -57,13 +56,6 @@ class _SetScheduleState extends State<SetSchedule> {
       widget.onlineOfflineAppBar,
       null,
       null,
-    );
-  }
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: AppIconsUsed.appBarIcon,
     );
   }
 

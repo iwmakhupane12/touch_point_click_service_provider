@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
@@ -18,9 +19,16 @@ class BaseWidget {
     );
   }
 
+  static Widget appBarBackButton(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(50.0),
+      onTap: () => Navigator.pop(context),
+      child: AppIconsUsed.appBarIcon,
+    );
+  }
+
   static Widget defaultScreen(
     BuildContext context,
-    Widget appBarBackButton,
     Widget displayBody,
     Widget bottomWidget,
     String appBarTitle,
@@ -33,7 +41,7 @@ class BaseWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
-        leading: appBarBackButton,
+        leading: appBarBackButton(context),
         title: Text(
           appBarTitle,
           style: AppTextStyles.normalBlack(FontWeight.normal, Colors.black),

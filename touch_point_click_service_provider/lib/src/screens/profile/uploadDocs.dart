@@ -17,7 +17,6 @@ class _UploadDocsState extends State<UploadDocs> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
-      appBarBackButton(),
       Container(
         child: Center(child: Text("Upload Documents")),
       ),
@@ -26,13 +25,6 @@ class _UploadDocsState extends State<UploadDocs> {
       widget.onlineOfflineAppBar,
       null,
       null,
-    );
-  }
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: AppIconsUsed.appBarIcon,
     );
   }
 }

@@ -39,7 +39,6 @@ class _RequestsState extends State<Requests> {
       initialIndex: 0,
       child: BaseWidget.defaultScreen(
         context,
-        appBarBackButton(),
         screenBody(),
         AppBarTabs.twoAppBarBottomTabs("Upcoming", "Past"),
         "Requests",
@@ -50,7 +49,7 @@ class _RequestsState extends State<Requests> {
     );
   }
 
-  Widget appBarBackButton() {
+  /* Widget appBarBackButton() {
     return InkWell(
       onTap: () => Navigator.pushReplacement(
         context,
@@ -61,7 +60,7 @@ class _RequestsState extends State<Requests> {
       ),
       child: AppIconsUsed.appBarIcon,
     );
-  }
+  }*/
 
   Widget screenBody() {
     return TabBarView(children: [

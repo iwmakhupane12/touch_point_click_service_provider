@@ -37,7 +37,6 @@ class _PastRequestState extends State<PastRequest> {
       initialIndex: 0,
       child: BaseWidget.defaultScreen(
         context,
-        appBarBackButton(),
         screenBody(),
         AppBarTabs.threeAppBarBottomTabs("Tracking", "Reciept", "Details"),
         "Past Request",
@@ -45,13 +44,6 @@ class _PastRequestState extends State<PastRequest> {
         null,
         listActions,
       ),
-    );
-  }
-
-  Widget appBarBackButton() {
-    return InkWell(
-      onTap: () => Navigator.pop(context),
-      child: AppIconsUsed.appBarIcon,
     );
   }
 
