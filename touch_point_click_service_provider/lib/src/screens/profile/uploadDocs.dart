@@ -13,10 +13,13 @@ class UploadDocs extends StatefulWidget {
 }
 
 class _UploadDocsState extends State<UploadDocs> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       Container(
         child: Center(child: Text("Upload Documents")),
       ),

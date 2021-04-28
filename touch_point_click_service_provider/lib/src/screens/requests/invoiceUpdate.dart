@@ -19,6 +19,7 @@ class InvoiceUpdate extends StatefulWidget {
 }
 
 class _InvoiceUpdateState extends State<InvoiceUpdate> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FontWeight normal = FontWeight.normal;
 
   final Color black = Colors.black;
@@ -42,6 +43,7 @@ class _InvoiceUpdateState extends State<InvoiceUpdate> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       screenBody(),
       null,
       "Client Invoice",

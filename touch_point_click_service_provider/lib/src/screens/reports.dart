@@ -15,10 +15,13 @@ class Reports extends StatefulWidget {
 }
 
 class _ReportsState extends State<Reports> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       Container(
         child: Center(child: Text("Reports")),
       ),

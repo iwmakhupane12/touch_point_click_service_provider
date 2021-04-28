@@ -13,29 +13,32 @@ import 'package:touch_point_click_service_provider/src/models/userSchedule.dart'
 import 'package:touch_point_click_service_provider/src/screens/schedule/scheduleSettings.dart';
 
 class SetSchedule extends StatefulWidget {
-  final OnlineOfflineAppBar onlineOfflineAppBar;
   final UserSchedule userSchedule;
-  final bool isDate;
+  final bool isDate, newSchedule;
 
-  SetSchedule(this.onlineOfflineAppBar, this.userSchedule, this.isDate);
+  SetSchedule(this.userSchedule, this.isDate, this.newSchedule);
 
   @override
   _SetScheduleState createState() => _SetScheduleState();
 }
 
 class _SetScheduleState extends State<SetSchedule> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final FontWeight normal = FontWeight.normal;
   final FontWeight bold = FontWeight.bold;
   final Color black = Colors.black;
   final Color white = Colors.white;
   final DateTime today = DateTime.now();
-  bool isDate;
+  bool isDate, newSchedule;
   UserSchedule userSchedule;
 
   @override
   void initState() {
     super.initState();
     isDate = widget.isDate;
+    newSchedule = widget.newSchedule;
+
     if (widget.userSchedule != null) {
       userSchedule = widget.userSchedule;
     }
@@ -45,6 +48,7 @@ class _SetScheduleState extends State<SetSchedule> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       ListView(
         children: [
           isDate ? setDate() : setTime(),
@@ -53,7 +57,7 @@ class _SetScheduleState extends State<SetSchedule> {
       ),
       null,
       "Schedule Settings",
-      widget.onlineOfflineAppBar,
+      null,
       null,
       null,
     );
@@ -256,17 +260,20 @@ class _SetScheduleState extends State<SetSchedule> {
   }
 
   void save() {
+    Navigator.pop(context, userSchedule);
+  }
+
+  /*void save() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) {
           return ScheduleSettings(
-              onlineOfflineAppBar: widget.onlineOfflineAppBar,
-              userSchedule: userSchedule);
+              userSchedule: userSchedule, newSchedule: newSchedule);
         },
       ),
     );
-  }
+  }*/
 
   void dateSingularPicker() {
     showDatePicker(
@@ -302,24 +309,24 @@ class _SetScheduleState extends State<SetSchedule> {
 
   void setDateState(String dateStart, String dateEnd) {
     if (widget.userSchedule != null) {
-      userSchedule.setStartDate(dateStart);
-      userSchedule.setEndDate(dateEnd);
+      userSchedule.startDate = dateStart;
+      userSchedule.endDate = dateEnd;
     } else {
       userSchedule = UserSchedule();
-      userSchedule.setStartDate(dateStart);
-      userSchedule.setEndDate(dateEnd);
+      userSchedule.startDate = dateStart;
+      userSchedule.endDate = dateEnd;
     }
   }
 
   void setTimeState(String timeStart, String timeEnd) {
     setState(() {
       if (widget.userSchedule != null) {
-        userSchedule.setStartTime(timeStart);
-        userSchedule.setEndTime(timeEnd);
+        userSchedule.startTime = timeStart;
+        userSchedule.endTime = timeEnd;
       } else {
         userSchedule = UserSchedule();
-        userSchedule.setStartTime(timeStart);
-        userSchedule.setEndTime(timeEnd);
+        userSchedule.startTime = timeStart;
+        userSchedule.endTime = timeEnd;
       }
     });
   }

@@ -196,4 +196,55 @@ class UtilWidget {
       ),
     );
   }
+
+  static bottomSheetHeaderContent(
+      BuildContext context, String heading, Widget content) {
+    return Container(
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+            automaticallyImplyLeading: false,
+            elevation: 0.0,
+            title: AppTextStyles.normalText(
+                heading, FontWeight.normal, Colors.black, 1),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: IconButton(
+                  icon: Icon(Icons.close),
+                  iconSize: 30,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ],
+          ),
+          body: content,
+        ),
+      ),
+    );
+  }
+
+  static bottomSheetStickerContent(BuildContext context, Widget content) {
+    return StickyHeader(
+      header: Container(
+          color: Colors.transparent, // AppColors.appBackgroundColor,
+          height: 50.0,
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: FloatingActionButton(
+              onPressed: () => Navigator.of(context).pop(),
+              backgroundColor: Colors.white,
+              child: Icon(Icons.close, color: Colors.black, size: 30),
+            ),
+          )),
+      content: content,
+    );
+  }
 }

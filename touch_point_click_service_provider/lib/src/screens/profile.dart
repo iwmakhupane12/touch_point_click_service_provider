@@ -25,6 +25,7 @@ final Color black = Colors.black;
 final Color white = Colors.white;
 
 class _ProfileState extends State<Profile> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ProfileImage _profileImage;
 
   TextEditingController _nameController,
@@ -66,6 +67,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       displayBody(),
       null,
       "Profile",

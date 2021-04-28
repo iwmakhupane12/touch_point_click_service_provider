@@ -19,6 +19,8 @@ class Requests extends StatefulWidget {
 }
 
 class _RequestsState extends State<Requests> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final FontWeight normal = FontWeight.normal;
   final FontWeight bold = FontWeight.bold;
   final Color black = Colors.black;
@@ -39,6 +41,7 @@ class _RequestsState extends State<Requests> {
       initialIndex: 0,
       child: BaseWidget.defaultScreen(
         context,
+        _scaffoldKey,
         screenBody(),
         AppBarTabs.twoAppBarBottomTabs("Upcoming", "Past"),
         "Requests",

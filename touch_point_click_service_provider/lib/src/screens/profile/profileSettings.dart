@@ -23,6 +23,7 @@ class ProfileSettings extends StatefulWidget {
 }
 
 class _ProfileSettingsState extends State<ProfileSettings> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FontWeight normal = FontWeight.normal;
 
   final Color black = Colors.black;
@@ -31,6 +32,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   Widget build(BuildContext context) {
     return BaseWidget.defaultScreen(
       context,
+      _scaffoldKey,
       displayBody(),
       null,
       "Account Settings",
@@ -104,12 +106,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               break;
             case "Support":
               {
-                return Schedule(widget.onlineOfflineAppBar);
+                return Requests(widget.onlineOfflineAppBar);
               }
               break;
             case "About":
               {
-                return Schedule(widget.onlineOfflineAppBar);
+                return Requests(widget.onlineOfflineAppBar);
               }
               break;
             case "Logout":
