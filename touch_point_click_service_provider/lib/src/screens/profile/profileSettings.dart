@@ -106,12 +106,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               break;
             case "Support":
               {
-                return Schedule(widget.onlineOfflineAppBar);
+                return Requests(widget.onlineOfflineAppBar);
               }
               break;
             case "About":
               {
-                return Schedule(widget.onlineOfflineAppBar);
+                return Requests(widget.onlineOfflineAppBar);
               }
               break;
             case "Logout":

@@ -147,12 +147,12 @@ class DashDrawer extends StatelessWidget {
               break;
             case "Support":
               {
-                return Schedule(onlineOfflineAppBar);
+                return Requests(onlineOfflineAppBar);
               }
               break;
             case "About":
               {
-                return Schedule(onlineOfflineAppBar);
+                return Requests(onlineOfflineAppBar);
               }
               break;
             case "Logout":

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
 
@@ -10,19 +11,16 @@ import 'package:touch_point_click_service_provider/src/components/onlineOfflineA
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/components/validateInput.dart';
 import 'package:touch_point_click_service_provider/src/models/userService.dart';
-import 'package:touch_point_click_service_provider/src/screens/services.dart';
 import 'package:touch_point_click_service_provider/src/services/database.dart';
 
 class ServiceDetails extends StatefulWidget {
   final bool newService;
-  final OnlineOfflineAppBar onlineOfflineAppBar;
   final UserService userService;
   final List<String> categories;
   final String uid;
 
   ServiceDetails(
-      {@required this.onlineOfflineAppBar,
-      @required this.newService,
+      {@required this.newService,
       this.userService,
       this.categories,
       @required this.uid});
@@ -32,6 +30,13 @@ class ServiceDetails extends StatefulWidget {
 }
 
 class _ServiceDetailsState extends State<ServiceDetails> {
+  final FontWeight normal = FontWeight.normal;
+  final FontWeight bold = FontWeight.bold;
+  final Color black = Colors.black;
+  final Color white = Colors.white;
+
+  dynamic results;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   UserService userService;
   List<String> categories = [];
@@ -76,19 +81,15 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       if (!categories.contains('Our Services')) {
         categories.insert(0, "Our Services");
       }
+      if (!userService.deleted) listActions.add(deleteIconBtn());
+
       initDropDown();
-      actions = userService.deleted ? ["Restore"] : ["Update", deleteService];
     } else {
       appBarTitle = "Add Service";
       _radioValue = firstValue;
       categories.add("Our Services");
       initDropDown();
-      actions = [saveService];
     }
-
-    initDropDownBtn();
-
-    listActions.add(menuButton());
 
     initControllers();
   }
@@ -110,18 +111,59 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       display(),
       null,
       appBarTitle,
-      widget.onlineOfflineAppBar,
+      saveBottomBtn(),
       null,
       listActions,
     );
   }
 
-  final FontWeight normal = FontWeight.normal;
-  final FontWeight bold = FontWeight.bold;
-  final Color black = Colors.black;
-  final Color white = Colors.white;
+  Widget deleteIconBtn() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: CircleAvatar(
+        backgroundColor: AppColors.appBackgroundColor,
+        radius: 20,
+        child: IconButton(
+            icon: AppIconsUsed.deleteIcon,
+            onPressed: () {
+              deleteBtn();
+            }),
+      ),
+    );
+  }
 
-  dynamic results;
+  String determineBtnText() {
+    if (newService) {
+      return saveService;
+    } else if (userService.deleted) {
+      return restoreService;
+    } else {
+      return updateService;
+    }
+  }
+
+  void determineClickedBtn() {
+    if (newService) {
+      saveBtn();
+    } else if (userService.deleted) {
+      restoreBtn();
+    } else {
+      updateBtn();
+    }
+  }
+
+  Widget saveBottomBtn() {
+    return InkWell(
+      onTap: () => determineClickedBtn(),
+      child: Container(
+          color: Colors.blue,
+          height: 50,
+          child: Align(
+              alignment: Alignment.center,
+              child: AppTextStyles.normalText(
+                  determineBtnText(), normal, white, 1))),
+    );
+  }
 
   Widget display() {
     return AbsorbPointer(
@@ -347,55 +389,10 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     });
   }
 
-  List<PopupMenuItem<String>> _dropDownMenuItems;
   static const String saveService = "Save";
   static const String deleteService = 'Delete';
-
-  List<String> actions = [];
-
-  void initDropDownBtn() {
-    _dropDownMenuItems = actions
-        .map(
-          (String value) => PopupMenuItem<String>(
-            value: value,
-            child: AppTextStyles.normalText(value, normal, black, 1),
-          ),
-        )
-        .toList();
-  }
-
-  Widget menuButton() {
-    return PopupMenuButton<String>(
-      icon: Icon(Icons.more_vert_rounded, color: Colors.black),
-      onSelected: (String value) => setState(
-        () {
-          switch (value) {
-            case "Save":
-              {
-                saveBtn();
-              }
-              break;
-            case deleteService:
-              {
-                deleteBtn();
-              }
-              break;
-            case "Update":
-              {
-                updateBtn();
-              }
-              break;
-            case "Restore":
-              {
-                restoreBtn();
-              }
-              break;
-          }
-        },
-      ),
-      itemBuilder: (BuildContext context) => this._dropDownMenuItems,
-    );
-  }
+  static const String restoreService = 'Restore';
+  static const String updateService = 'Update';
 
   void setControllersToNoText() {
     serviceController.text = "";

@@ -22,6 +22,7 @@ import 'package:touch_point_click_service_provider/src/screens/schedule.dart';
 import 'package:touch_point_click_service_provider/src/screens/requests.dart';
 import 'package:touch_point_click_service_provider/src/screens/reports.dart';
 import 'package:touch_point_click_service_provider/src/services/database.dart';
+import 'package:touch_point_click_service_provider/src/services/scheduleDatabase.dart';
 
 class Home extends StatefulWidget {
   final OnlineOfflineAppBar onlineOfflineAppBar;
@@ -210,10 +211,23 @@ class _HomeState extends State<Home> {
         break;
       case "schedule":
         {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Schedule(onlineOfflineAppBar)));
+          UtilWidget.showLoadingDialog(context, "Getting Schedules");
+          ScheduleDatabase database = ScheduleDatabase(_uid);
+          dynamic results = await database.fetchSchedules();
+          Timer(Duration(milliseconds: 500), () {
+            if (results != null) {
+              if (results != "Unknown Error") {
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Schedule(results, database.queryResults)));
+              } else {
+                //Show snackbar of an error
+              }
+            }
+          });
         }
         break;
       case "services":
@@ -228,8 +242,8 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Services(onlineOfflineAppBar,
-                            results, database.queryResults)));
+                        builder: (context) =>
+                            Services(results, database.queryResults)));
               } else {
                 //Show snackbar of an error
               }
@@ -291,7 +305,6 @@ class _HomeState extends State<Home> {
   Widget homeProfile() {
     return InkWell(
       onTap: () {
-        //navToScreen("profile");
         _scaffoldKey.currentState.openDrawer();
       },
       child: UtilWidget.baseCard(
@@ -383,9 +396,7 @@ class _HomeState extends State<Home> {
               Icons.mail_outline_rounded,
               color: Colors.black,
             ),
-            onPressed: () {
-              changeScreen();
-            }),
+            onPressed: () {}),
       ),
     );
   }
@@ -404,15 +415,6 @@ class _HomeState extends State<Home> {
             onPressed: () {}),
       ),
     );
-  }
-
-  void changeScreen() {
-    /*Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Draft(),
-      ),
-    );*/
   }
 
   Widget companyDetails(

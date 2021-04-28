@@ -31,7 +31,7 @@ class BaseWidget {
     Widget displayBody,
     Widget bottomWidget,
     String appBarTitle,
-    OnlineOfflineAppBar onlineOfflineAppBar,
+    Widget bottomNavBarWidget,
     FloatingActionButton floatingActionButton,
     List<Widget> actions,
   ) {
@@ -52,7 +52,7 @@ class BaseWidget {
       body: BaseWidget.clipedBase(
         displayBody,
       ),
-      bottomNavigationBar: onlineOfflineAppBar,
+      bottomNavigationBar: bottomNavBarWidget,
       floatingActionButton: floatingActionButton,
     );
   }
@@ -62,7 +62,7 @@ class BaseWidget {
       Widget displayBody,
       Widget bottomWidget,
       String appBarTitle,
-      OnlineOfflineAppBar onlineOfflineAppBar,
+      Widget bottomNavBarWidget,
       bool toHome) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -77,7 +77,7 @@ class BaseWidget {
         bottom: bottomWidget,
       ),
       body: displayBody,
-      bottomNavigationBar: onlineOfflineAppBar,
+      bottomNavigationBar: bottomNavBarWidget,
     );
   }
 }

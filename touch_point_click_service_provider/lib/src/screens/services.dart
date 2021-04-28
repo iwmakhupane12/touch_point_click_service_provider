@@ -15,16 +15,14 @@ import 'package:touch_point_click_service_provider/src/components/baseWidget.dar
 import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 import 'package:touch_point_click_service_provider/src/models/userService.dart';
-import 'package:touch_point_click_service_provider/src/screens/home.dart';
 import 'package:touch_point_click_service_provider/src/screens/services/serviceDetails.dart';
 import 'package:touch_point_click_service_provider/src/services/database.dart';
 
 class Services extends StatefulWidget {
-  final OnlineOfflineAppBar onlineOfflineAppBar;
   final dynamic results;
   final String success;
 
-  Services(this.onlineOfflineAppBar, this.results, this.success);
+  Services(this.results, this.success);
 
   @override
   _ServicesState createState() => _ServicesState();
@@ -94,7 +92,7 @@ class _ServicesState extends State<Services> {
           screenBody(),
           AppBarTabs.twoAppBarBottomTabs("Active", "Deleted"),
           "Services",
-          widget.onlineOfflineAppBar,
+          null,
           floatingActionButton(),
           null,
         ));
@@ -265,14 +263,12 @@ class _ServicesState extends State<Services> {
       MaterialPageRoute(
         builder: (context) => !addService
             ? ServiceDetails(
-                onlineOfflineAppBar: widget.onlineOfflineAppBar,
                 userService: sendUserService,
                 categories: sendCategory,
                 uid: _uid,
                 newService: false,
               )
             : ServiceDetails(
-                onlineOfflineAppBar: widget.onlineOfflineAppBar,
                 categories: sendCategory,
                 uid: _uid,
                 newService: true,

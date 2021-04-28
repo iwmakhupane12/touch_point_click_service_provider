@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 
 import 'package:touch_point_click_service_provider/src/components/dateTimeConvertFunctions.dart';
+import 'package:touch_point_click_service_provider/src/components/validateInput.dart';
 
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
 
 import 'package:touch_point_click_service_provider/src/screens/schedule/setSchedule.dart';
 
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
-import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
 import 'package:touch_point_click_service_provider/src/components/utilWidget.dart';
 
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
@@ -16,10 +19,10 @@ import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIco
 import 'package:touch_point_click_service_provider/src/services/scheduleDatabase.dart';
 
 class ScheduleSettings extends StatefulWidget {
-  final OnlineOfflineAppBar onlineOfflineAppBar;
   final UserSchedule userSchedule;
+  final bool newSchedule;
 
-  ScheduleSettings({@required this.onlineOfflineAppBar, this.userSchedule});
+  ScheduleSettings({this.userSchedule, this.newSchedule});
 
   @override
   _ScheduleSettingsState createState() => _ScheduleSettingsState();
@@ -35,27 +38,25 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
   final Color white = Colors.white;
 
   UserSchedule userSchedule;
-  bool newSchedule = false;
-  static const String update = "Update", delete = "Delete", save = "Save";
+  bool newSchedule;
+  static const String update = "Update", save = "Save";
   List<Widget> listActions = [];
 
   @override
   void initState() {
     super.initState();
     _uid = FirebaseAuth.instance.currentUser.uid; //Getting user Id
-
-    if (widget.userSchedule != null) {
+    newSchedule = widget.newSchedule;
+    if (widget.userSchedule != null && !newSchedule) {
       userSchedule = widget.userSchedule;
-      actions = [update, delete];
-      initDropDownBtn();
+      listActions.add(deleteIconBtn());
     } else {
-      userSchedule = UserSchedule(autoOnline: false, autoAccept: false);
-      newSchedule = true;
-      actions = [save];
-      initDropDownBtn();
+      if (widget.userSchedule != null) {
+        userSchedule = widget.userSchedule;
+      } else {
+        userSchedule = UserSchedule(autoOnline: false, autoAccept: false);
+      }
     }
-
-    listActions.add(menuButton());
   }
 
   @override
@@ -66,56 +67,39 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
       display(),
       null,
       "Schedule Settings",
-      widget.onlineOfflineAppBar,
+      saveBottomBtn(),
       null,
       listActions,
     );
   }
 
-  List<String> actions = [];
-  List<PopupMenuItem<String>> _dropDownMenuItems;
-
-  void initDropDownBtn() {
-    _dropDownMenuItems = actions
-        .map(
-          (String value) => PopupMenuItem<String>(
-            value: value,
-            child: AppTextStyles.normalText(value, normal, black,
-                1), //look for save icon then use a ListTile
-          ),
-        )
-        .toList();
+  Widget deleteIconBtn() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: CircleAvatar(
+        backgroundColor: AppColors.appBackgroundColor,
+        radius: 20,
+        child: IconButton(
+            icon: AppIconsUsed.deleteIcon,
+            onPressed: () {
+              deleteBtn();
+            }),
+      ),
+    );
   }
 
-  Widget menuButton() {
-    return PopupMenuButton<String>(
-      icon: Icon(Icons.more_vert_rounded, color: black),
-      onSelected: (String value) => setState(
-        () {
-          switch (value) {
-            case save:
-              {
-                //validateSetVars();
-                //saveBtn();
-                print("Save");
-              }
-              break;
-            case delete:
-              {
-                //deleteBtn();
-                print("Delete");
-              }
-              break;
-            case update:
-              {
-                //updateBtn();
-                print("Update");
-              }
-              break;
-          }
-        },
-      ),
-      itemBuilder: (BuildContext context) => this._dropDownMenuItems,
+  Widget saveBottomBtn() {
+    return InkWell(
+      onTap: () {
+        !newSchedule ? updateBtn() : saveBtn();
+      },
+      child: Container(
+          color: Colors.blue,
+          height: 50,
+          child: Align(
+              alignment: Alignment.center,
+              child: AppTextStyles.normalText(
+                  !newSchedule ? update : save, normal, white, 1))),
     );
   }
 
@@ -183,9 +167,19 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
     return timeHasPassed;
   }
 
+  double sizeCard() {
+    if (startDateBln && startTimeBln) {
+      return 200;
+    } else if (startDateBln || startTimeBln) {
+      return 180;
+    } else {
+      return 160;
+    }
+  }
+
   Widget scheduleDisplay() {
     return UtilWidget.baseCard(
-      160,
+      sizeCard(),
       Column(
         children: [
           ListTile(
@@ -194,12 +188,18 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
                 style: AppTextStyles.normalBlack(normal, black),
                 overflow: TextOverflow.ellipsis),
           ),
+          startDateBln
+              ? ValidateInput.errorText("Date" + ValidateInput.errorTextNull)
+              : Container(),
           ListTile(
             leading: AppIconsUsed.scheduleTime,
             title: Text(timeReturn(),
                 style: AppTextStyles.normalBlack(normal, black),
                 overflow: TextOverflow.ellipsis),
           ),
+          startTimeBln
+              ? ValidateInput.errorText("Time" + ValidateInput.errorTextNull)
+              : Container(),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -236,14 +236,17 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
   }
 
   void addDateTimeRangeScreen(bool isDate) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return SetSchedule(widget.onlineOfflineAppBar, userSchedule, isDate);
+          return SetSchedule(userSchedule, isDate, newSchedule);
         },
       ),
-    );
+    ).then((value) {
+      userSchedule = value;
+      setState(() {});
+    });
   }
 
   Widget textHolder(String text) {
@@ -254,8 +257,6 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
       maxLines: 1,
     );
   }
-
-  bool autoOnline = false, autoAccept = false;
 
   Widget settings() {
     return UtilWidget.baseCard(
@@ -299,60 +300,6 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
     );
   }
 
-/*
-  void openBottomSheet(bool heading) {
-    _scaffoldKey.currentState.showBottomSheet(
-      (ctx) => bottomSheetContent(heading ? setDate() : Text("Time")),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25.0),
-          topRight: Radius.circular(25.0),
-        ),
-      ),
-    );
-  }
-
-  Widget bottomSheetContent(Widget content) {
-    return UtilWidget.clipRectForApp(
-      Container(
-        color: AppColors.appBackgroundColor,
-        height: MediaQuery.of(context).size.height,
-        child: ListView(
-          children: [
-            UtilWidget.bottomSheetStickerContent(
-              context,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  content,
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                        onPressed: () => setState(() {
-                          //Removing previous text and replacing it with new
-                          /*arrivalPromoText.removeAt(index);
-                          arrivalPromoText.insert(
-                              index, _editingController.text);*/
-                          Navigator.pop(context);
-                        }),
-                        style: UtilWidget.buttonStyle,
-                        child:
-                            AppTextStyles.normalText("Next", normal, white, 1),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-*/
   bool absorb = false;
 
   void setAbsorbState(bool state) {
@@ -361,10 +308,31 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
     });
   }
 
+  bool startDateBln = false,
+      endDateBln = false,
+      startTimeBln = false,
+      endTimeBln = false;
+
   bool validateSetVars() {
     bool validate = false;
 
-    return true; //validate;
+    if (userSchedule != null) {
+      userSchedule.startDate == null
+          ? startDateBln = true
+          : startDateBln = false;
+
+      userSchedule.startTime == null
+          ? startTimeBln = true
+          : startTimeBln = false;
+    }
+
+    if (!startDateBln && !startTimeBln) {
+      validate = true;
+    } else {
+      setState(() {});
+    }
+
+    return validate; //validate;
   }
 
   void saveBtn() async {
@@ -395,23 +363,51 @@ class _ScheduleSettingsState extends State<ScheduleSettings> {
     }
   }
 
-  /*Widget saveButton() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        child: ElevatedButton(
-          style: UtilWidget.buttonStyle,
-          child: Text(
-            "Save",
-            style: AppTextStyles.normalBlack(normal, white),
-          ),
-          onPressed: () {
-            
-          },
-        ),
-      ),
-    );
-  }*/
+  void deleteBtn() async {
+    UtilWidget.showLoadingDialog(context, "Deleting...");
+    setAbsorbState(true);
+    dynamic result =
+        await ScheduleDatabase(_uid).removeSchedule(userSchedule.docID);
+    if (result != null) {
+      if (result == "Schedule Deleted") {
+        UtilWidget.showSnackBar(context, "Schedule Deleted");
+        Navigator.pop(context); //Remove loading dialog
+        Timer(Duration(milliseconds: 500), () => Navigator.pop(context));
+      } else {
+        print("Unknown Error");
+        Navigator.pop(context);
+      }
+    } else {
+      Navigator.pop(context);
+      setAbsorbState(false);
+    }
+  }
+
+  void updateBtn() async {
+    if (validateSetVars()) {
+      UtilWidget.showLoadingDialog(context, "Updating...");
+      setAbsorbState(true);
+      dynamic result = await ScheduleDatabase(_uid).updateSchedule(
+          userSchedule.docID,
+          userSchedule.startDate,
+          userSchedule.endDate,
+          userSchedule.startTime,
+          userSchedule.endTime,
+          userSchedule.autoOnline,
+          userSchedule.autoAccept);
+      if (result != null) {
+        if (result == "Schedule Updated") {
+          Navigator.pop(context);
+          UtilWidget.showSnackBar(context, "Schedule Updated");
+          setAbsorbState(false);
+        } else {
+          print("Unknown Error");
+          Navigator.pop(context);
+        }
+      } else {
+        Navigator.pop(context);
+        setAbsorbState(false);
+      }
+    }
+  }
 }

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:touch_point_click_service_provider/src/components/baseWidget.dart';
@@ -5,16 +8,16 @@ import 'package:touch_point_click_service_provider/src/components/utilWidget.dar
 import 'package:touch_point_click_service_provider/src/models/userSchedule.dart';
 import 'package:touch_point_click_service_provider/src/screens/schedule/scheduleSettings.dart';
 
-import 'package:touch_point_click_service_provider/src/components/onlineOfflineAppBar.dart';
-
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appColors.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appIconsUsed.dart';
 import 'package:touch_point_click_service_provider/src/appUsedStylesSizes/appTextStyles.dart';
+import 'package:touch_point_click_service_provider/src/services/scheduleDatabase.dart';
 
 class Schedules extends StatefulWidget {
-  final OnlineOfflineAppBar onlineOfflineAppBar;
+  final List<UserSchedule> userScheduleList;
 
-  Schedules(this.onlineOfflineAppBar);
+  Schedules(this.userScheduleList);
+
   @override
   _SchedulesState createState() => _SchedulesState();
 }
@@ -23,7 +26,9 @@ class _SchedulesState extends State<Schedules> {
   final FontWeight normal = FontWeight.normal;
   final FontWeight bold = FontWeight.bold;
   final Color black = Colors.black;
-  final bool schedulesAvailable = true;
+  bool schedulesAvailable = true;
+
+  List<UserSchedule> userScheduleList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -32,81 +37,96 @@ class _SchedulesState extends State<Schedules> {
         backgroundColor: AppColors.appBackgroundColor,
         body: ListView(
           children: [
-            schedulesAvailable
-                ? setDateTime("09 Mar 2021", "15 Mar 2021", "08:00", "16:00")
-                : viewText(),
+            schedulesAvailable ? setScheduleListView() : viewText(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
             backgroundColor: Colors.blue,
             child: AppIconsUsed.scheduleAddIcon,
-            onPressed: () => changeScreen(false)),
+            onPressed: () => changeScreen(0, false)),
       ),
     );
   }
 
   UserSchedule userSchedule = UserSchedule();
+  String _uid;
 
   @override
   void initState() {
     super.initState();
-    dummyData();
+    _uid = FirebaseAuth.instance.currentUser.uid; //Getting user Id
+    if (widget.userScheduleList.length >= 0) {
+      userScheduleList = widget.userScheduleList;
+    } else {
+      schedulesAvailable = false;
+    }
   }
 
-  void dummyData() {
-    userSchedule.docID = "1";
-    userSchedule.startDate = "09 Mar 2021";
-    userSchedule.endDate = "15 Mar 2021";
-    userSchedule.startTime = "08:00";
-    userSchedule.endTime = "16:00";
-    userSchedule.autoAccept = true;
-    userSchedule.autoOnline = false;
+  Column setScheduleListView() {
+    List<Widget> tempSchedules = [];
+    for (int i = 0; i < userScheduleList.length; i++) {
+      UserSchedule tempUserSchedule = userScheduleList.elementAt(i);
+      tempSchedules.add(setDateTime(
+          i,
+          tempUserSchedule.docID,
+          tempUserSchedule.startDate,
+          tempUserSchedule.endDate,
+          tempUserSchedule.startTime,
+          tempUserSchedule.endTime));
+    }
+
+    return Column(children: tempSchedules);
   }
 
-  void changeScreen(bool edit) {
+  void changeScreen(int index, bool edit) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => !edit
-            ? ScheduleSettings(onlineOfflineAppBar: widget.onlineOfflineAppBar)
+            ? ScheduleSettings(newSchedule: true)
             : ScheduleSettings(
-                onlineOfflineAppBar: widget.onlineOfflineAppBar,
-                userSchedule: userSchedule,
-              ),
+                userSchedule: userScheduleList.elementAt(index),
+                newSchedule: false),
       ),
-    );
+    ).then(_onGoBack);
   }
 
-  Widget returnSchedule() {
-    //Use setDateTime with list builder
-  }
-
-  Widget setDateTime(String date1, String date2, String time1, String time2) {
+  Widget setDateTime(int scheduleIndex, String deleteDocID, String date1,
+      String date2, String time1, String time2) {
     return UtilWidget.baseCard(
       156,
       Column(
         children: [
-          schedulesWidgets(date1, date2, time1, time2),
+          schedulesWidgets(
+              scheduleIndex, deleteDocID, date1, date2, time1, time2),
         ],
       ),
     );
   }
 
-  Widget schedulesWidgets(
+  String nullText(String text) {
+    if (text != null) {
+      return "- $text";
+    }
+    return "";
+  }
+
+  Widget schedulesWidgets(int scheduleListIndex, String deleteDocID,
       String date1, String date2, String time1, String time2) {
+    int index = scheduleListIndex;
+    String docID = deleteDocID;
     return Material(
       color: Colors.transparent,
       child: Column(
         children: [
           ListTile(
             leading: AppIconsUsed.calendarIcon,
-            title: Text('$date1 - $date2',
-                style: AppTextStyles.normalBlack(normal, black),
-                overflow: TextOverflow.ellipsis),
+            title: AppTextStyles.normalText(
+                '$date1 ${nullText(date2)}', normal, black, 1),
           ),
           ListTile(
             leading: AppIconsUsed.scheduleTime,
-            title: Text('$time1 - $time2',
+            title: Text('$time1 ${nullText(time2)}',
                 style: AppTextStyles.normalBlack(normal, black),
                 overflow: TextOverflow.ellipsis),
           ),
@@ -114,7 +134,7 @@ class _SchedulesState extends State<Schedules> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(),
-              deleteEditBtns(),
+              deleteEditBtns(index, docID),
             ],
           ),
         ],
@@ -122,7 +142,9 @@ class _SchedulesState extends State<Schedules> {
     );
   }
 
-  Widget deleteEditBtns() {
+  Widget deleteEditBtns(int scheduleIndex, String deleteDocID) {
+    int index = scheduleIndex;
+    String docID = deleteDocID;
     return Row(children: [
       Padding(
         padding: const EdgeInsets.only(right: 16.0, bottom: 4.0),
@@ -130,10 +152,9 @@ class _SchedulesState extends State<Schedules> {
           backgroundColor: AppColors.appBackgroundColor,
           radius: 20,
           child: IconButton(
-              icon: AppIconsUsed.editIcon,
-              onPressed: () {
-                changeScreen(true);
-              }),
+            icon: AppIconsUsed.editIcon,
+            onPressed: () => changeScreen(index, true),
+          ),
         ),
       ),
       Padding(
@@ -142,13 +163,72 @@ class _SchedulesState extends State<Schedules> {
           backgroundColor: AppColors.appBackgroundColor,
           radius: 20,
           child: IconButton(
-              icon: AppIconsUsed.deleteIcon,
-              onPressed: () {
-                //changeScreen();
-              }),
+            icon: AppIconsUsed.deleteIcon,
+            onPressed: () => deleteBtn(docID),
+          ),
         ),
       ),
     ]);
+  }
+
+  dynamic results;
+  String success;
+
+  FutureOr _onGoBack(dynamic value) async {
+    ScheduleDatabase database = ScheduleDatabase(_uid);
+    dynamic backResults = await database.fetchSchedules();
+
+    if (backResults != null) {
+      if (backResults != "Unknown Error") {
+        setState(() {
+          results = backResults;
+          success = database.queryResults;
+          userScheduleList = [];
+          initSchedules();
+        });
+      } else {
+        //Show snackbar of an error loading services, check internet connection
+      }
+    }
+  }
+
+  void initSchedules() {
+    if (results != null) {
+      if (success == "Success") {
+        userScheduleList = results;
+      } else if (results == "No Schedules") {
+        print("No Schedules");
+      } else {
+        print("Unknown Error");
+      }
+    }
+  }
+
+  bool absorb = false;
+
+  void setAbsorbState(bool state) {
+    setState(() {
+      absorb = state;
+    });
+  }
+
+  void deleteBtn(String docID) async {
+    UtilWidget.showLoadingDialog(context, "Deleting...");
+    setAbsorbState(true);
+    dynamic result = await ScheduleDatabase(_uid).removeSchedule(docID);
+    if (result != null) {
+      if (result == "Schedule Deleted") {
+        UtilWidget.showSnackBar(context, "Schedule Deleted");
+        Navigator.pop(context); //Remove loading dialog
+        setState(() {});
+      } else {
+        print("Unknown Error");
+        Navigator.pop(context);
+      }
+    } else {
+      Navigator.pop(context);
+      setAbsorbState(false);
+    }
   }
 
   Widget viewText() {
@@ -169,7 +249,7 @@ class _SchedulesState extends State<Schedules> {
                     style: TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        changeScreen(false);
+                        changeScreen(0, false);
                       }),
                 TextSpan(
                     text: "to set a schedule OR the round button below.\n\n"),
