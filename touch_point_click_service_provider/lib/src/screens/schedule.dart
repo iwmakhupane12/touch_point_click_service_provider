@@ -39,11 +39,14 @@ class _ScheduleState extends State<Schedule> {
   dynamic results;
   String success, _uid;
 
+  UserSchedule userSchedule;
+
   void initSchedules() {
     if (results != null) {
       if (success == "Success") {
         userScheduleList = results;
       } else if (results == "No Schedules") {
+        schedulesAvailable = false;
         print("No Schedules");
       } else {
         print("Unknown Error");
@@ -57,6 +60,11 @@ class _ScheduleState extends State<Schedule> {
     results = widget.results;
     success = widget.success;
     initSchedules();
+
+    /*Temoporary line below*/
+    userSchedule = UserSchedule();
+    userSchedule.autoOnline = true;
+    userSchedule.autoAccept = false;
     super.initState();
   }
 
@@ -68,7 +76,7 @@ class _ScheduleState extends State<Schedule> {
       child: BaseWidget.defaultScreenNoCurve(
         context,
         screenBody(),
-        AppBarTabs.twoAppBarBottomTabs("Schedules", "To-Do-List"),
+        AppBarTabs.twoAppBarBottomTabs("Schedule", "To-Do-List"),
         "Schedule",
         null,
         true,
@@ -78,9 +86,6 @@ class _ScheduleState extends State<Schedule> {
 
   Widget screenBody() {
     return TabBarView(children: [
-      /*Container(
-        child: Schedules(userScheduleList),
-      ),*/
       Container(child: schedulesBody()),
       Container(
         color: white,
@@ -95,17 +100,138 @@ class _ScheduleState extends State<Schedule> {
         backgroundColor: AppColors.appBackgroundColor,
         body: ListView(
           children: [
-            schedulesAvailable ? setScheduleListView() : viewText(),
+            //schedulesAvailable ? setScheduleListView() : viewText(),
+            //!schedulesAvailable ? display() : viewText(),
+            checkButtons()
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.blue,
-            child: AppIconsUsed.scheduleAddIcon,
-            onPressed: () => changeScreen(0, false)),
+        floatingActionButton:
+            schedulesAvailable ? deleteButton() : addScheduleButton(),
+        bottomNavigationBar: saveBottomBtn(),
       ),
     );
   }
 
+  // ignore: missing_return
+  Widget checkButtons() {
+    if (userScheduleList.length > 0 && schedulesAvailable != true) {
+      return display();
+    } else if (userScheduleList.length == 0 && schedulesAvailable != false) {
+      return viewText();
+    } else if (userScheduleList.length == 0 && schedulesAvailable != true) {
+      return Text("Return empty schedule to set");
+    }
+  }
+
+  FloatingActionButton deleteButton() {
+    return FloatingActionButton(
+        tooltip: "Delete Schedule",
+        backgroundColor: Colors.red,
+        child: AppIconsUsed.whiteDeleteIcon,
+        onPressed: () => changeScreen(0, false));
+  }
+
+  FloatingActionButton addScheduleButton() {
+    return FloatingActionButton(
+        tooltip: "Add Schedule",
+        backgroundColor: Colors.blue,
+        child: AppIconsUsed.scheduleAddIcon,
+        onPressed: () => addScheduleState());
+  }
+
+  void addScheduleState() {
+    setState(() => schedulesAvailable = true);
+  }
+
+  Widget textHolder(String text) {
+    return Text(
+      text,
+      style: AppTextStyles.normalBlack(normal, black),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    );
+  }
+
+  Widget saveBottomBtn() {
+    return InkWell(
+      onTap: () {
+        //!newSchedule ? updateBtn() : saveBtn();
+      },
+      child: Container(
+          color: Colors.blue,
+          height: 50,
+          child: Align(
+              alignment: Alignment.center,
+              child: AppTextStyles.normalText("Save", normal, white, 1))),
+    );
+  }
+
+  Widget display() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
+          child: textHolder("Automations"),
+        ),
+        settings(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
+              child: textHolder("Schedule"),
+            ),
+            //scheduleDisplay(),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget settings() {
+    return UtilWidget.baseCard(
+      200,
+      Column(
+        children: [
+          ListTile(
+            title: textHolder("Go Online Automatically"),
+            trailing: Switch(
+              value: userSchedule.autoOnline,
+              onChanged: (bool value) => setState(
+                () => userSchedule.autoOnline = value,
+              ),
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: textHolder("Accept Requests Automatically"),
+            trailing: Switch(
+              value: userSchedule.autoAccept,
+              onChanged: (bool value) => setState(
+                () => userSchedule.autoAccept = value,
+              ),
+            ),
+          ),
+          Divider(),
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 10.0),
+              child: Text(
+                "NB: The system will automatically set you as online and accept requests according to your schedule.",
+                style: AppTextStyles.normalGreyishSmall(),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*******Remove this below ********/
   Column setScheduleListView() {
     List<Widget> tempSchedules = [];
     for (int i = 0; i < userScheduleList.length; i++) {
@@ -247,13 +373,13 @@ class _ScheduleState extends State<Schedule> {
                 color: Colors.black,
               ),
               children: [
-                TextSpan(text: "There are no set schedules.\n\n"),
+                TextSpan(text: "There is no set schedule.\n\n"),
                 TextSpan(
                     text: "Click here ",
                     style: TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        changeScreen(0, false);
+                        addScheduleState();
                       }),
                 TextSpan(
                     text: "to set a schedule OR the round button below.\n\n"),
